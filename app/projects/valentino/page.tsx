@@ -265,7 +265,6 @@ export default function ValentinoProject() {
               controls
               autoPlay
               playsInline
-              muted
               loop
               className="w-full h-full object-cover"
               onPlay={() => setIsPlaying(true)}

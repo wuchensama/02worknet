@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
@@ -19,174 +19,294 @@ const violaFont = localFont({
 
 // 定义作品集图片类型
 interface GalleryImage {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
+  id: string;
   src: string;
-  orientation?: 'portrait' | 'landscape'; // 图片方向，默认为"portrait"（竖屏）
+  alt: string;
+  category: string;
+  width: number;
+  height: number;
 }
 
-// 图片预加载和方向检测函数
-const detectImageOrientation = (src: string): Promise<'portrait' | 'landscape'> => {
-  return new Promise((resolve) => {
-    const img = new globalThis.Image();
-    img.onload = () => {
-      // 如果宽度大于高度，则为横屏图片，否则为竖屏图片
-      resolve(img.width > img.height ? 'landscape' : 'portrait');
-    };
-    img.onerror = () => {
-      // 加载失败时默认为竖屏
-      resolve('portrait');
-    };
-    img.src = src;
-  });
-};
-
-// 图片幻灯片导航按钮
-function SlideNavButton({ direction, onClick, disabled }: { direction: 'prev' | 'next', onClick: () => void, disabled?: boolean }) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
-        "w-12 h-12 rounded-full flex items-center justify-center",
-        "bg-black/30 backdrop-blur-sm border border-white/10",
-        "text-white/70 hover:text-white transition-colors",
-        "focus:outline-none",
-        disabled && "opacity-30 cursor-not-allowed"
-      )}
-    >
-      {direction === 'prev' ? (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-        </svg>
-      ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
-        </svg>
-      )}
-    </button>
-  );
-}
-
-// 缩略图组件
-function Thumbnail({ image, isActive, onClick }: { image: GalleryImage, isActive: boolean, onClick: () => void }) {
-  return (
-    <div 
-      className={cn(
-        "relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300",
-        "h-16 md:h-20",
-        isActive ? "ring-2 ring-orange-500 opacity-100" : "opacity-60 hover:opacity-80"
-      )}
-      onClick={onClick}
-    >
-      {/* 占位渐变背景 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
-      
-      {/* 图片（实际项目中替换为真实图片） */}
-      {image.src && (
-        <div 
-          className="absolute inset-0 bg-center bg-cover" 
-          style={{backgroundImage: `url(${image.src})`}} 
-        />
-      )}
-    </div>
-  );
-}
-
-// 过滤分类标签
-function CategoryFilter({ category, isActive, onClick }: { category: string, isActive: boolean, onClick: () => void }) {
+// 分类标签组件
+const CategoryFilter = ({ category, isActive, onClick }: { category: string, isActive: boolean, onClick: () => void }) => {
   return (
     <button
       onClick={onClick}
       className={cn(
         "px-4 py-2 text-sm rounded-full transition-all duration-300",
-        isActive 
-          ? "bg-gradient-to-r from-orange-500 to-amber-600 text-white" 
+        isActive
+          ? "bg-gradient-to-r from-orange-500 to-amber-600 text-white"
           : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80"
       )}
     >
       {category}
     </button>
   );
-}
+};
+
+// 照片灯箱组件
+const ImageLightbox = ({ 
+  image, 
+  isOpen,
+  onClose,
+  onPrev,
+  onNext,
+  hasNext,
+  hasPrev,
+  current,
+  total
+}: { 
+  image: GalleryImage | null, 
+  isOpen: boolean,
+  onClose: () => void,
+  onPrev: () => void,
+  onNext: () => void,
+  hasNext: boolean,
+  hasPrev: boolean,
+  current: number,
+  total: number
+}) => {
+  if (!image) return null;
+  
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+          onClick={onClose}
+        >
+          <div className="relative max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.5 }}
+              className="relative w-full overflow-hidden rounded-xl bg-transparent flex items-center justify-center"
+            >
+              <div className="flex items-center justify-center w-full h-full">
+                <div className="absolute inset-0 bg-transparent"></div>
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <img 
+                    src={image.src} 
+                    alt={image.alt}
+                    className="max-h-[80vh] max-w-full object-contain z-10 transition-all duration-500" 
+                    style={{
+                      height: "auto",
+                      width: "auto",
+                      maxHeight: "80vh",
+                      maxWidth: "100%",
+                      objectFit: "contain"
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent flex flex-col justify-end p-6 md:p-8 z-20">
+                    <span className="text-orange-400 text-sm mb-2">{image.category}</span>
+                    <h3 className="text-2xl md:text-3xl font-medium text-white mb-2">{image.alt}</h3>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* 导航按钮 */}
+            <div className="absolute inset-0 flex items-center justify-between px-4 z-30">
+              <button
+                onClick={onPrev}
+                disabled={!hasPrev}
+                className={cn(
+                  "w-12 h-12 rounded-full flex items-center justify-center bg-black/30 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white transition-colors focus:outline-none",
+                  !hasPrev && "opacity-30 cursor-not-allowed"
+                )}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={onNext}
+                disabled={!hasNext}
+                className={cn(
+                  "w-12 h-12 rounded-full flex items-center justify-center bg-black/30 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white transition-colors focus:outline-none",
+                  !hasNext && "opacity-30 cursor-not-allowed"
+                )}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* 关闭按钮 */}
+            <button
+              className="absolute top-4 right-4 z-40 w-10 h-10 rounded-full flex items-center justify-center bg-black/50 text-white/80 hover:text-white transition-colors"
+              onClick={onClose}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* 图片计数 */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 bg-black/50 px-3 py-1 rounded-full text-sm">
+              {current} / {total}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// 预览缩略图
+const ThumbnailImage = ({ 
+  image, 
+  isActive, 
+  onClick 
+}: { 
+  image: GalleryImage, 
+  isActive: boolean, 
+  onClick: () => void 
+}) => {
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300",
+        isActive ? "ring-2 ring-orange-500 opacity-100" : "opacity-60 hover:opacity-80"
+      )}
+      onClick={onClick}
+      style={{ 
+        aspectRatio: `${image.width} / ${image.height}`,
+        width: '100%'
+      }}
+    >
+      <img 
+        src={image.src} 
+        alt={image.alt}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  );
+};
 
 // 艺术写真作品图库组件
 export default function GallerySection() {
-  // 示例图片集（在实际项目中可以替换为真实数据）
-  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([
-    { id: 1, title: "时尚人像", description: "城市风格时尚人像摄影", category: "人像", src: "/images/1Q3A8728.jpg" },
-    { id: 2, title: "自然风光", description: "山水之间的自然之美", category: "风景", src: "/images/landscape1.jpg" },
-    { id: 3, title: "光影探索", description: "光与影的艺术表达", category: "创意", src: "/images/creative1.jpg" },
-    { id: 4, title: "建筑风格", description: "城市建筑的几何美学", category: "建筑", src: "/images/architecture1.jpg" },
-    { id: 5, title: "街头掠影", description: "城市街头的瞬间捕捉", category: "人像", src: "/images/portrait2.jpg" },
-    { id: 6, title: "海景日落", description: "海边日落的绚丽色彩", category: "风景", src: "/images/landscape2.jpg" },
-    { id: 7, title: "抽象构成", description: "色彩与形状的抽象表达", category: "创意", src: "/images/creative2.jpg" },
-    { id: 8, title: "古典建筑", description: "古典建筑的历史之美", category: "建筑", src: "/images/architecture2.jpg" },
-  ]);
-
-  // 预加载图片并检测方向
-  useEffect(() => {
-    const detectOrientations = async () => {
-      const updatedImages = await Promise.all(
-        galleryImages.map(async (image) => {
-          if (!image.orientation && image.src) {
-            const orientation = await detectImageOrientation(image.src);
-            return { ...image, orientation };
-          }
-          return image;
-        })
-      );
-      setGalleryImages(updatedImages);
-    };
-
-    detectOrientations();
-  }, []);
-
-  // 所有分类
-  const categories = ["全部", ...Array.from(new Set(galleryImages.map(img => img.category)))];
-  
-  // 状态管理
-  const [activeIndex, setActiveIndex] = useState(0);
+  // 状态
   const [activeCategory, setActiveCategory] = useState("全部");
-  const [filteredImages, setFilteredImages] = useState<GalleryImage[]>(galleryImages);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [showLightbox, setShowLightbox] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // 处理分类过滤
+  // 加载图片数据
   useEffect(() => {
-    if (activeCategory === "全部") {
-      setFilteredImages(galleryImages);
-    } else {
-      setFilteredImages(galleryImages.filter(img => img.category === activeCategory));
-    }
-    setActiveIndex(0); // 重置当前活动图片索引
-  }, [activeCategory, galleryImages]);
-  
-  // 导航控制
-  const handlePrev = () => {
-    setActiveIndex(prev => (prev > 0 ? prev - 1 : prev));
-  };
-  
-  const handleNext = () => {
-    setActiveIndex(prev => (prev < filteredImages.length - 1 ? prev + 1 : prev));
-  };
-  
-  // 键盘导航
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
-        handlePrev();
-      } else if (e.key === "ArrowRight") {
-        handleNext();
+    const fetchPhotos = async () => {
+      setIsLoading(true);
+      try {
+        // 调用API获取照片
+        let apiUrl = '/api/photos';
+        if (activeCategory !== "全部") {
+          // 转换分类名称为英文路径
+          const categoryMap: Record<string, string> = {
+            "明星": "stars",
+            "博主": "bloggers",
+            "创作": "creative",
+            "花絮": "scenes",
+            "全部": "all"
+          };
+          
+          const categoryPath = categoryMap[activeCategory] || activeCategory.toLowerCase();
+          apiUrl += `?category=${categoryPath}`;
+        }
+        
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        // 淡出当前图片
+        if (galleryImages.length > 0) {
+          setGalleryImages([]);
+          await new Promise(resolve => setTimeout(resolve, 300));
+        }
+        
+        // 转换API数据到组件数据格式
+        const mappedData = data.map((item: any) => ({
+          id: item.id,
+          src: item.src,
+          alt: item.alt,
+          category: convertCategoryName(item.category),
+          width: item.width,
+          height: item.height
+        }));
+        
+        // 淡入新图片
+        setGalleryImages(mappedData);
+        setActiveIndex(0); // 重置索引
+      } catch (error) {
+        console.error("加载照片失败", error);
+        // 如果API调用失败，使用默认数据
+        setGalleryImages([
+          { id: "1", src: "/images/1Q3A8728.jpg", alt: "时尚人像", category: "人像", width: 3, height: 4 },
+          { id: "2", src: "/images/landscape1.jpg", alt: "自然风光", category: "风景", width: 16, height: 9 },
+          { id: "3", src: "/images/creative1.jpg", alt: "光影探索", category: "创意", width: 4, height: 3 },
+          { id: "4", src: "/images/architecture1.jpg", alt: "建筑风格", category: "建筑", width: 3, height: 4 },
+          { id: "5", src: "/images/portrait2.jpg", alt: "街头掠影", category: "人像", width: 3, height: 4 },
+          { id: "6", src: "/images/landscape2.jpg", alt: "海景日落", category: "风景", width: 16, height: 9 },
+          { id: "7", src: "/images/creative2.jpg", alt: "抽象构成", category: "创意", width: 1, height: 1 },
+          { id: "8", src: "/images/architecture2.jpg", alt: "古典建筑", category: "建筑", width: 3, height: 2 },
+        ]);
+      } finally {
+        setIsLoading(false);
       }
     };
     
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIndex, filteredImages.length]);
+    fetchPhotos();
+  }, [activeCategory]);
   
-  // 获取当前活动图片
-  const activeImage = filteredImages[activeIndex];
+  // 转换英文分类为中文分类
+  const convertCategoryName = (category: string): string => {
+    const categoryMap: Record<string, string> = {
+      "all": "全部",
+      "stars": "明星",
+      "bloggers": "博主",
+      "creative": "创作",
+      "scenes": "花絮"
+    };
+    
+    return categoryMap[category] || category;
+  };
+  
+  // 所有分类
+  const categories = ["全部", "明星", "博主", "创作", "花絮"];
+  
+  // 当前显示的图片
+  const currentImage = galleryImages[activeIndex] || null;
+  
+  // 前后导航
+  const hasPrevImage = activeIndex > 0;
+  const hasNextImage = activeIndex < galleryImages.length - 1;
+  
+  const goToPrev = () => {
+    if (hasPrevImage) {
+      setActiveIndex(activeIndex - 1);
+    }
+  };
+  
+  const goToNext = () => {
+    if (hasNextImage) {
+      setActiveIndex(activeIndex + 1);
+    }
+  };
+  
+  // 打开/关闭灯箱
+  const openLightbox = () => {
+    setShowLightbox(true);
+  };
+  
+  const closeLightbox = () => {
+    setShowLightbox(false);
+  };
   
   return (
     <section className={`relative w-full py-24 overflow-hidden bg-[#000000] ${songFont.variable} ${violaFont.variable}`}>
@@ -212,101 +332,176 @@ export default function GallerySection() {
         </motion.div>
         
         {/* 分类过滤栏 */}
-        <div className="flex flex-wrap gap-3 mb-10 justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="flex flex-wrap gap-3 mb-10 justify-center"
+        >
           {categories.map((category, index) => (
-            <CategoryFilter
-              key={index}
-              category={category}
-              isActive={activeCategory === category}
-              onClick={() => setActiveCategory(category)}
-            />
+            <motion.div
+              key={category}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.05 * index }}
+            >
+              <CategoryFilter
+                category={category}
+                isActive={activeCategory === category}
+                onClick={() => setActiveCategory(category)}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
         
         {/* 主图片展示区 */}
-        <div className="max-w-5xl mx-auto">
-          {/* 根据图片方向动态调整容器，但不限制其大小 */}
-          <div 
-            className={cn(
-              "relative w-full overflow-hidden rounded-xl bg-black/20 mb-6 flex items-center justify-center",
-              // 移除固定宽高比，使用弹性布局
-              "transition-all duration-500 min-h-[300px] md:min-h-[500px]"
-            )}
+        {isLoading ? (
+          <div className="relative w-full overflow-hidden rounded-xl bg-black/20 mb-6 flex items-center justify-center min-h-[300px] md:min-h-[500px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+          </div>
+        ) : galleryImages.length > 0 ? (
+          <motion.div 
+            className="max-w-5xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            <AnimatePresence mode="wait">
-              {activeImage && (
-                <motion.div
-                  key={activeImage.id}
+            {/* 主图预览 */}
+            <div 
+              className="relative w-full overflow-hidden rounded-xl bg-transparent mb-6 flex items-center justify-center transition-all duration-500 min-h-[300px] md:min-h-[80vh] cursor-pointer"
+              onClick={openLightbox}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={activeIndex}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
                   className="flex items-center justify-center w-full h-full"
                 >
-                  {/* 占位背景（实际项目中替换为真实图片） */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
-                  
-                  {/* 图片（使用实际图片大小） */}
-                  {activeImage.src && (
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <img 
-                        src={activeImage.src}
-                        alt={activeImage.title}
-                        className={cn(
-                          "max-h-full max-w-full object-contain z-10",
-                          "transition-all duration-500"
-                        )}
-                      />
-                      
-                      {/* 图片信息覆盖 */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 md:p-8 z-20">
-                        <span className="text-orange-400 text-sm mb-2">{activeImage.category}</span>
-                        <h3 className="text-2xl md:text-3xl font-medium text-white mb-2">{activeImage.title}</h3>
-                        <p className="text-white/70 text-sm md:text-base font-song">{activeImage.description}</p>
-                      </div>
+                  <div className="absolute inset-0 bg-transparent"></div>
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <img 
+                      src={currentImage?.src} 
+                      alt={currentImage?.alt || "照片预览"} 
+                      className="max-h-full max-w-full object-contain z-10 transition-all duration-500"
+                      style={{
+                        height: "100%",
+                        width: "auto",
+                        maxWidth: "100%",
+                        objectFit: "contain"
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent flex flex-col justify-end p-6 md:p-8 z-20">
+                      <span className="text-orange-400 text-sm mb-2">{currentImage?.category}</span>
+                      <h3 className="text-2xl md:text-3xl font-medium text-white mb-2">{currentImage?.alt}</h3>
                     </div>
-                  )}
+                  </div>
                 </motion.div>
-              )}
-            </AnimatePresence>
-            
-            {/* 导航按钮 */}
-            <div className="absolute inset-0 flex items-center justify-between px-4 z-30">
-              <SlideNavButton 
-                direction="prev" 
-                onClick={handlePrev} 
-                disabled={activeIndex === 0} 
-              />
-              <SlideNavButton 
-                direction="next" 
-                onClick={handleNext} 
-                disabled={activeIndex === filteredImages.length - 1} 
-              />
+              </AnimatePresence>
+              
+              {/* 左右导航按钮 */}
+              <div className="absolute inset-0 flex items-center justify-between px-4 z-30">
+                <button
+                  onClick={(e) => { e.stopPropagation(); goToPrev(); }}
+                  disabled={!hasPrevImage}
+                  className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center bg-black/30 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white transition-colors focus:outline-none",
+                    !hasPrevImage && "opacity-30 cursor-not-allowed"
+                  )}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                
+                <button
+                  onClick={(e) => { e.stopPropagation(); goToNext(); }}
+                  disabled={!hasNextImage}
+                  className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center bg-black/30 backdrop-blur-sm border border-white/10 text-white/70 hover:text-white transition-colors focus:outline-none",
+                    !hasNextImage && "opacity-30 cursor-not-allowed"
+                  )}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
+            
+            {/* 缩略图导航 - 响应式瀑布流布局：手机4列，电脑5列，限制显示三排并添加渐隐效果 */}
+            <div className="hidden md:block relative">
+              {/* 电脑版 - 5列瀑布流 */}
+              <div className="grid grid-cols-5 gap-3 mt-6" style={{ maxHeight: '330px', overflow: 'hidden' }}>
+                {[0, 1, 2, 3, 4].map(columnIndex => (
+                  <div key={columnIndex} className="flex flex-col gap-3">
+                    {galleryImages
+                      .filter((_, index) => index % 5 === columnIndex)
+                      .map((image) => (
+                        <ThumbnailImage
+                          key={image.id}
+                          image={image}
+                          isActive={galleryImages.indexOf(image) === activeIndex}
+                          onClick={() => setActiveIndex(galleryImages.indexOf(image))}
+                        />
+                      ))}
+                  </div>
+                ))}
+              </div>
+              {/* 渐隐蒙版 - 位于第三排的位置 */}
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black to-transparent"></div>
+            </div>
+
+            <div className="md:hidden relative">
+              {/* 手机版 - 4列瀑布流 */}
+              <div className="grid grid-cols-4 gap-1 mt-4" style={{ maxHeight: '260px', overflow: 'hidden' }}>
+                {[0, 1, 2, 3].map(columnIndex => (
+                  <div key={columnIndex} className="flex flex-col gap-1">
+                    {galleryImages
+                      .filter((_, index) => index % 4 === columnIndex)
+                      .map((image) => (
+                        <ThumbnailImage
+                          key={image.id}
+                          image={image}
+                          isActive={galleryImages.indexOf(image) === activeIndex}
+                          onClick={() => setActiveIndex(galleryImages.indexOf(image))}
+                        />
+                      ))}
+                  </div>
+                ))}
+              </div>
+              {/* 渐隐蒙版 - 位于第三排的位置 */}
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent"></div>
+            </div>
+          </motion.div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-white/60 font-song">这个分类下暂时没有照片</p>
+            <p className="text-white/40 text-sm mt-2">
+              请将照片添加到 public/images/photo/{activeCategory === "全部" ? "all" : 
+              activeCategory === "明星" ? "stars" : 
+              activeCategory === "博主" ? "bloggers" : 
+              activeCategory === "创作" ? "creative" : 
+              "scenes"} 目录
+            </p>
           </div>
-          
-          {/* 缩略图滑条 */}
-          <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
-            {filteredImages.map((image, index) => (
-              <Thumbnail
-                key={image.id}
-                image={image}
-                isActive={index === activeIndex}
-                onClick={() => setActiveIndex(index)}
-              />
-            ))}
-          </div>
-        </div>
-        
-        {/* 相片数量统计 */}
-        <div className="text-center mt-8 text-white/50 text-sm">
-          {filteredImages.length > 0 ? (
-            <p>当前展示 {activeIndex + 1} / {filteredImages.length} 张照片</p>
-          ) : (
-            <p>没有找到符合条件的照片</p>
-          )}
-        </div>
+        )}
       </div>
+      
+      {/* 灯箱 */}
+      <ImageLightbox
+        image={currentImage}
+        isOpen={showLightbox}
+        onClose={closeLightbox}
+        onPrev={goToPrev}
+        onNext={goToNext}
+        hasPrev={hasPrevImage}
+        hasNext={hasNextImage}
+        current={activeIndex + 1}
+        total={galleryImages.length}
+      />
     </section>
-  );
+  )
 } 

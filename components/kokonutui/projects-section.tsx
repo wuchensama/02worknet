@@ -36,14 +36,23 @@ function ProjectCard({
   // 决定是否使用图片而不是背景色
   const useImage = image && !image.includes("project");
   
-  // 获取页面链接 - 对于Valentino项目使用特定链接
+  // 获取页面链接 - 对于Valentino和Dior项目使用特定链接
   const getProjectLink = () => {
     if (title.includes("Valentino")) {
       return "/projects/valentino";
     }
+    if (title.includes("dior")) {
+      return "/projects/dior";
+    }
+    if (title.includes("宝格丽")) {
+      return "/projects/bvlgari";
+    }
     // 其他项目可以添加更多条件判断
     return "#";
   };
+
+  // 获取项目链接
+  const projectLink = getProjectLink();
 
   return (
     <motion.div
@@ -55,63 +64,64 @@ function ProjectCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="overflow-hidden rounded-lg">
-        <div className="relative aspect-[3/4] w-full">
-          {/* 图片或占位背景 */}
-          {useImage ? (
-            <img 
-              src={image} 
-              alt={title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          ) : (
-            <div className={cn(
-              "absolute inset-0 bg-gradient-to-br",
-              title.includes("Valentino") ? "from-rose-800/40 to-rose-950/70" :
-              title.includes("dior") ? "from-blue-800/40 to-blue-950/70" :
-              title.includes("达人") ? "from-purple-800/40 to-purple-950/70" :
-              "from-amber-800/40 to-amber-950/70"
-            )} />
-          )}
-          
-          {/* 保持渐变蒙版，确保在图片之上 */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
-          
-          {/* 内容区域 */}
-          <div className="absolute bottom-0 left-0 z-20 p-5 w-full">
-            <h3 className="text-xl md:text-2xl font-medium text-white mb-2">{title}</h3>
-            <p className="text-sm text-white/70 font-song mb-3 line-clamp-2">
-              {description}
-            </p>
+      <a href={projectLink} className="block">
+        <div className="overflow-hidden rounded-lg">
+          <div className="relative aspect-[3/4] w-full">
+            {/* 图片或占位背景 */}
+            {useImage ? (
+              <img 
+                src={image} 
+                alt={title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <div className={cn(
+                "absolute inset-0 bg-gradient-to-br",
+                title.includes("Valentino") ? "from-rose-800/40 to-rose-950/70" :
+                title.includes("dior") ? "from-blue-800/40 to-blue-950/70" :
+                title.includes("达人") ? "from-purple-800/40 to-purple-950/70" :
+                "from-amber-800/40 to-amber-950/70"
+              )} />
+            )}
             
-            {/* 标签和详情按钮并排排列 */}
-            <div className="flex justify-between items-center">
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag, index) => (
-                  <span key={index} className="text-xs text-white/60 bg-white/10 px-2 py-1 rounded-full">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
+            {/* 保持渐变蒙版，确保在图片之上 */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
+            
+            {/* 内容区域 */}
+            <div className="absolute bottom-0 left-0 z-20 p-5 w-full">
+              <h3 className="text-xl md:text-2xl font-medium text-white mb-2">{title}</h3>
+              <p className="text-sm text-white/70 font-song mb-3 line-clamp-2">
+                {description}
+              </p>
               
-              {/* 扁平线条风按钮，字体更小，与标签并排 */}
-              <a href={getProjectLink()}>
+              {/* 标签和详情按钮并排排列 */}
+              <div className="flex justify-between items-center">
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag, index) => (
+                    <span key={index} className="text-xs text-white/60 bg-white/10 px-2 py-1 rounded-full">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+                
+                {/* 扁平线条风按钮，字体更小，与标签并排 */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: isHovered ? 1 : 0.5 }}
                   transition={{ duration: 0.3 }}
                   className="inline-flex items-center text-xs text-orange-400 hover:text-orange-300 transition-colors"
+                  onClick={(e) => e.preventDefault()}
                 >
                   <span className="border-b border-orange-400 pb-0.5 mr-1">查看详情</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </motion.div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </a>
     </motion.div>
   )
 }
@@ -147,16 +157,16 @@ export default function ProjectsSection() {
       tags: ["Valentino", "品牌拍摄"],
     },
     {
-      image: "/images/project2.jpg",
+      image: "/images/dior01/DAF156EA-9E0E-488F-880E-31A2493BC020_1_105_c.jpeg",
       title: "松花湖dior",
       description: "定格迪奥品牌时装周画面，捕捉光影中的奢华美学",
       tags: ["Dior", "品牌拍摄"],
     },
     {
-      image: "/images/project3.jpg",
-      title: "明星活动拍摄",
-      description: "为一线明星雕刻专属活动切片，打造个人专属视觉语言",
-      tags: ["明星", "活动拍摄"],
+      image: "/images/baogeli75liuyifei/B3A14EDB-3B1B-4C8E-8130-6264211D70B9_1_105_c.jpeg",
+      title: "宝格丽75周年&刘亦菲",
+      description: "宝格丽 75 周年灵蛇展：璀璨之夜，星耀灵蛇",
+      tags: ["BVLGARI", "刘亦菲"],
     },
   ];
   
@@ -206,11 +216,7 @@ export default function ProjectsSection() {
 
   return (
     <section className={`relative min-h-screen w-full flex flex-col py-32 overflow-hidden bg-[#0c0c0c] ${songFont.variable} ${violaFont.variable}`}>
-      {/* 暖色调背景渐变 */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-[30%] right-0 w-[90%] h-[90%] rounded-full bg-gradient-to-br from-orange-500/20 via-amber-600/10 to-transparent blur-[120px] opacity-60" />
-        <div className="absolute -bottom-[30%] left-0 w-[70%] h-[70%] rounded-full bg-gradient-to-tr from-orange-700/10 via-amber-500/5 to-transparent blur-[100px] opacity-40" />
-      </div>
+      {/* 删除了暖色调背景渐变部分 */}
       
       <div className="relative z-10 container mx-auto px-4 md:px-6">
         {/* 标题部分 */}
@@ -324,8 +330,246 @@ export default function ProjectsSection() {
           <div className="text-white/70 text-sm md:text-base bg-white/5 px-6 py-3 rounded-full border border-white/10 backdrop-blur-sm">
             服务超过<span className="font-medium text-white ml-1">15个国际品牌</span>
           </div>
-          <div className="text-white/70 text-sm md:text-base bg-white/5 px-6 py-3 rounded-full border border-white/10 backdrop-blur-sm">
-            孵化账号总粉丝量破<span className="font-medium text-white ml-1">500万</span>
+        </motion.div>
+        
+        {/* 品牌Logo墙 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="w-full max-w-5xl mx-auto mt-8 mb-16"
+        >
+          {/* 使用特定的手机版布局 - 每行5个logo，交错排列，3行，只对手机版有效 */}
+          <div className="grid grid-cols-5 md:hidden gap-4 mb-8">
+            {/* 第一行 - 5个logo */}
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/louis-vuitton@logotyp.us.svg" 
+                alt="LV" 
+                className="h-8 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/chanel@logotyp.us.svg" 
+                alt="CHANEL" 
+                className="h-7 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/dior@logotyp.us.svg" 
+                alt="DIOR" 
+                className="h-7 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/tiffany@logotyp.us.svg" 
+                alt="TIFFANY" 
+                className="h-8 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/76cb5526-40d5-4e46-b45c-a4f0be4962c4.png" 
+                alt="TONYWORD" 
+                className="h-7 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+
+            {/* 第二行 - 5个logo，稍微缩进 */}
+            <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300 ml-2">
+              <img 
+                src="/images/logos/bf9fae69-f6e6-401c-887a-99c42a98a6be.png" 
+                alt="ROGER VIVIER" 
+                className="h-10 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-14 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/35d825f3-90a5-4da1-a9f9-563b8c8f0472.png" 
+                alt="VALENTINO" 
+                className="h-12 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/armani-jeans@logotyp.us.svg" 
+                alt="ARMANI" 
+                className="h-8 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/52e99263-dbc7-44ce-b7e7-4d9028994589.png" 
+                alt="BALMAIN" 
+                className="h-7 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300 mr-2">
+              <img 
+                src="/images/logos/afe58897-476a-404d-854a-861109be210d.png" 
+                alt="CHAUMET" 
+                className="h-7 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+
+            {/* 第三行 - 5个logo */}
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/3a276e2d-9325-440f-8253-e47aee080d0e.png" 
+                alt="ELIE SAAB" 
+                className="h-7 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/db52e183-4b7b-4ea5-ae12-35d38f87f549.png" 
+                alt="YSL" 
+                className="h-7 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/23d859cf-cca5-4b97-85b9-92bb548c2922.png" 
+                alt="ERMANNO" 
+                className="h-10 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/3293f9bd-2daa-4d76-9f94-fa574a3bef10.png" 
+                alt="GRAFF" 
+                className="h-10 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+              />
+            </div>
+            <div className="flex items-center justify-center h-10 hover:scale-110 transition-all duration-300">
+              <img 
+                src="/images/logos/cartier@logotyp.us.svg" 
+                alt="CARTIER" 
+                className="h-8 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+              />
+            </div>
+          </div>
+          
+          {/* 保留原来的桌面版布局 - 对手机版隐藏 */}
+          <div className="hidden md:block">
+            {/* Logo容器-第一行 */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6 md:gap-10 mb-10">
+              {/* 第一行品牌logo */}
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/louis-vuitton@logotyp.us.svg" 
+                  alt="LV" 
+                  className="h-9 md:h-10 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/chanel@logotyp.us.svg" 
+                  alt="CHANEL" 
+                  className="h-8 md:h-9 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/dior@logotyp.us.svg" 
+                  alt="DIOR" 
+                  className="h-8 md:h-9 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/tiffany@logotyp.us.svg" 
+                  alt="TIFFANY" 
+                  className="h-10 md:h-11 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/76cb5526-40d5-4e46-b45c-a4f0be4962c4.png" 
+                  alt="TONYWORD" 
+                  className="h-8 md:h-10 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/bf9fae69-f6e6-401c-887a-99c42a98a6be.png" 
+                  alt="ROGER VIVIER" 
+                  className="h-16 md:h-19 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/35d825f3-90a5-4da1-a9f9-563b8c8f0472.png" 
+                  alt="VALENTINO" 
+                  className="h-18 md:h-21 w-auto opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/armani-jeans@logotyp.us.svg" 
+                  alt="ARMANI" 
+                  className="h-18 md:h-20 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                />
+              </div>
+            </div>
+            
+            {/* Logo容器-第二行 */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-6 md:gap-10">
+              {/* 第二行品牌logo */}
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/52e99263-dbc7-44ce-b7e7-4d9028994589.png" 
+                  alt="BALMAIN" 
+                  className="h-10 md:h-12 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/afe58897-476a-404d-854a-861109be210d.png" 
+                  alt="CHAUMET" 
+                  className="h-7 md:h-8 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/3a276e2d-9325-440f-8253-e47aee080d0e.png" 
+                  alt="ELIE SAAB" 
+                  className="h-8 md:h-10 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-12 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/db52e183-4b7b-4ea5-ae12-35d38f87f549.png" 
+                  alt="YSL" 
+                  className="h-7 md:h-8 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-16 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/23d859cf-cca5-4b97-85b9-92bb548c2922.png" 
+                  alt="ERMANNO" 
+                  className="h-15 md:h-18 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-16 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/3293f9bd-2daa-4d76-9f94-fa574a3bef10.png" 
+                  alt="GRAFF" 
+                  className="h-15 md:h-18 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300 mix-blend-multiply" 
+                />
+              </div>
+              <div className="flex items-center justify-center h-16 hover:scale-110 transition-all duration-300">
+                <img 
+                  src="/images/logos/cartier@logotyp.us.svg" 
+                  alt="CARTIER" 
+                  className="h-11 md:h-13 w-auto invert opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                />
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

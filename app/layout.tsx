@@ -1,12 +1,10 @@
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-
-const inter = Inter({ subsets: ["latin"] })
+import './globals.css'
+import type { Metadata } from 'next'
+import Navigation from './navigation'
 
 export const metadata: Metadata = {
-  title: "Portfolio - Jeyon",
-  description: "摄影师嘉阳的个人作品集",
+  title: '摄影师嘉阳 - 奢华品牌视觉专家',
+  description: '专注于奢华品牌视觉创作与内容运营的摄影师',
 }
 
 export default function RootLayout({
@@ -16,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <Navigation />
+        {children}
+      </body>
     </html>
   )
 } 

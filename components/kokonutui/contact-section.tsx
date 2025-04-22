@@ -113,49 +113,49 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="pt-8 md:pt-20 pb-8 md:pb-20 border-t border-white/10"
+          className="pt-6 md:pt-12 pb-4 md:pb-8 border-t border-white/10"
         >
           {/* 移动端垂直排列，电脑端左右分栏布局 */}
-          <div className="flex flex-col md:flex-row md:gap-24 md:justify-between">
+          <div className="flex flex-col md:flex-row md:gap-12 md:justify-between">
             {/* 左侧：服务标题和描述（在移动端位于顶部） */}
-            <div className="mb-6 md:mb-0 md:w-1/4">
-              <h2 className="text-4xl md:text-7xl lg:text-8xl font-serif text-white/90 leading-tight mb-3 md:mb-8">
+            <div className="mb-4 md:mb-0 md:w-1/4">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif text-white/90 leading-tight mb-2 md:mb-4">
                 服务
               </h2>
-              <p className="text-white/60 font-song text-xs md:text-base mb-6 max-w-none tracking-wide">
+              <p className="text-white/60 font-song text-xs md:text-sm mb-4 max-w-none tracking-wide">
                 提供专业的视觉内容创作服务，从创意到执行，为您的品牌塑造独特形象。
               </p>
             </div>
             
             {/* 右侧：三个服务类别（在移动端位于下方并排） */}
-            <div className="grid grid-cols-3 gap-2 md:gap-8 md:w-2/3 md:justify-self-end">
-                 <div>
-                <h5 className="text-sm md:text-2xl text-white/90 font-medium mb-2 md:mb-6">品牌视觉</h5>
-                <ul className="space-y-1 md:space-y-4">
-                  <li className="text-white/60 text-[6.5px] md:text-base">品牌形象片</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">时尚摄影</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">产品摄影</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">视觉策划</li>
+            <div className="grid grid-cols-3 gap-2 md:gap-6 md:w-2/3 md:justify-self-end">
+              <div>
+                <h5 className="text-sm md:text-lg text-white/90 font-medium mb-2 md:mb-4">品牌视觉</h5>
+                <ul className="space-y-0.5 md:space-y-2">
+                  <li className="text-white/60 text-[6.5px] md:text-sm">品牌形象片</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">时尚摄影</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">产品摄影</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">视觉策划</li>
                 </ul>
               </div>
 
-                  <div>
-                <h5 className="text-sm md:text-2xl text-white/90 font-medium mb-2 md:mb-6">短视频拍摄</h5>
-                <ul className="space-y-1 md:space-y-4">
-                  <li className="text-white/60 text-[6.5px] md:text-base">抖音短视频</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">自媒体Vlog</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">社交媒体内容</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">达人账号孵化</li>
+              <div>
+                <h5 className="text-sm md:text-lg text-white/90 font-medium mb-2 md:mb-4">短视频拍摄</h5>
+                <ul className="space-y-0.5 md:space-y-2">
+                  <li className="text-white/60 text-[6.5px] md:text-sm">抖音短视频</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">自媒体Vlog</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">社交媒体内容</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">达人账号孵化</li>
                 </ul>
               </div>
               
               <div>
-                <h5 className="text-sm md:text-2xl text-white/90 font-medium mb-2 md:mb-6">技术服务</h5>
-                <ul className="space-y-1 md:space-y-4">
-                  <li className="text-white/60 text-[6.5px] md:text-base">后期调色</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">航拍服务</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">电影级拍摄</li>
-                  <li className="text-white/60 text-[6.5px] md:text-base">视觉创意指导</li>
+                <h5 className="text-sm md:text-lg text-white/90 font-medium mb-2 md:mb-4">技术服务</h5>
+                <ul className="space-y-0.5 md:space-y-2">
+                  <li className="text-white/60 text-[6.5px] md:text-sm">后期调色</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">航拍服务</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">电影级拍摄</li>
+                  <li className="text-white/60 text-[6.5px] md:text-sm">视觉创意指导</li>
                 </ul>
               </div>
             </div>
@@ -163,9 +163,9 @@ export default function ContactSection() {
         </motion.div>
         
         {/* 底部信息 */}
-        <div className="mt-32 text-center border-t border-white/10 pt-16">
-          <p className="text-white/40 text-sm">
-            © {new Date().getFullYear()} 摄影师嘉阳. 保留所有权利. | © Photographer Jeyon. All rights reserved.
+        <div className="mt-10 text-center border-t border-white/10 pt-6">
+          <p className="text-white/40 text-xs">
+            © {new Date().getFullYear()} 摄影师嘉阳. 保留所有权利. | © Photographer Jeyon.
           </p>
         </div>
       </div>
