@@ -321,14 +321,14 @@ export default function GallerySection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="mb-16 md:mb-20 max-w-3xl mx-auto text-center"
+          className="mb-16 md:mb-20 max-w-5xl mx-auto px-6 md:px-10 lg:px-16"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white/90 leading-tight mb-4">
-            艺术写真作品
-          </h2>
-          <p className="text-white/60 font-song text-sm md:text-base">
-            通过镜头捕捉瞬间，用光影讲述故事，每一帧都是独特的艺术表达
-          </p>
+          <div className="flex items-center gap-4 mb-3">
+            <div className="w-2 h-16 rounded-full bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-medium text-white/90 leading-tight">
+              艺术写真作品
+            </h2>
+          </div>
         </motion.div>
         
         {/* 分类过滤栏 */}
