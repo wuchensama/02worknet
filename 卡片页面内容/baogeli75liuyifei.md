@@ -2,9 +2,7 @@
 
 宝格丽 75 周年灵蛇展：璀璨之夜，星耀灵蛇
 
-<video src="C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\应邀参加宝格丽75周年珍藏艺术展开幕盛典，和神仙姐姐刘亦菲一起party #宝格丽 #刘亦菲 #Bvlgari #神仙姐姐刘亦菲.mp4"></video>
-
-
+<video src="C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\baogeli01.mp4"></video>
 
 踏入BVLGARI 75 周年灵蛇展的现场，仿若进入一个被灵蛇元素编织的奢华梦境。从场馆入口蜿蜒盘旋的灵蛇雕塑，到展厅内陈列的灵蛇主题珠宝，每一处细节都诉说着宝格丽与灵蛇文化跨越时空的不解之缘，彰显着品牌大胆华丽、独具匠心的风格。
 
@@ -18,7 +16,7 @@
 
 
 
-![B3A14EDB-3B1B-4C8E-8130-6264211D70B9_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\B3A14EDB-3B1B-4C8E-8130-6264211D70B9_1_105_c.jpeg)
+![liuyifei](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\liuyifei.jpeg)
 
 ![EB39F360-8044-4477-8B1A-234F9A72F67A_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\EB39F360-8044-4477-8B1A-234F9A72F67A_1_105_c.jpeg)
 
@@ -28,4 +26,10 @@
 
 ![3F9DBFFE-BFE6-43E1-BD1A-75CB03137CFE_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\3F9DBFFE-BFE6-43E1-BD1A-75CB03137CFE_1_105_c.jpeg)
 
-![85B30B02-B45A-4262-BF77-49513256EECB_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\85B30B02-B45A-4262-BF77-49513256EECB_1_105_c.jpeg)
+![5EA52A67-CF76-4E5B-A8FD-2CC887F3AD52](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\5EA52A67-CF76-4E5B-A8FD-2CC887F3AD52.jpeg)
+
+![A870EF54-1F61-4CEF-8717-5731EE176E81_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\A870EF54-1F61-4CEF-8717-5731EE176E81_1_105_c.jpeg)
+
+![BB50C670-472C-404B-898C-02BA9F124108_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\BB50C670-472C-404B-898C-02BA9F124108_1_105_c.jpeg)
+
+![D27203AE-995D-40E2-8B42-5203654150FB_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\baogeli75liuyifei\D27203AE-995D-40E2-8B42-5203654150FB_1_105_c.jpeg)

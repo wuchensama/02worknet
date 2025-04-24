@@ -1,4 +1,6 @@
-# 尚美巴黎 CHAUMET 晚宴：星光与珠宝的绮梦之约
+# 巴黎 CHAUMET 晚宴
+
+## 星光与珠宝的绮梦之约
 
 <video src="C:\Users\Administrator\Documents\myworknet\02worknet\public\images\chaumet\chaumet01.mp4"></video>
 
@@ -11,3 +13,9 @@
 活动中，我们细细聆听 CHAUMET 的故事，感受品牌在历史长河中传承的匠心与创新。全新系列珠宝与城堡的布置交相辉映，在灯光与自然景色的衬托下，璨然涌动，如同一场珠宝与艺术的对话，揭开了 CHAUMET 发展历程中的崭新篇章。这场晚宴不仅是一场珠宝的视觉盛宴，更是一次深入探索 CHAUMET 文化魅力的难忘之旅，让人沉醉其中，流连忘返。
 
 ![c96a842fdf944da79dd869cca785381e~tplv-dy-resize-walign-adapt-aq_540_q75](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\chaumet\c96a842fdf944da79dd869cca785381e~tplv-dy-resize-walign-adapt-aq_540_q75.webp)
+
+![FB41BCD6-EB54-479D-94CA-333F25B050D8_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\chaumet\FB41BCD6-EB54-479D-94CA-333F25B050D8_1_105_c.jpeg)
+
+![1F7C2B39-7550-47E8-A5BD-26C6B2E8BA20_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\chaumet\1F7C2B39-7550-47E8-A5BD-26C6B2E8BA20_1_105_c.jpeg)
+
+![9751D4C6-4F05-412F-BD06-22FD6E42693B_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\chaumet\9751D4C6-4F05-412F-BD06-22FD6E42693B_1_105_c.jpeg)

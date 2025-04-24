@@ -242,8 +242,8 @@ export default function ValentinoProject() {
           transition={{ duration: 0.8 }}
           className="mb-10 max-w-4xl"
         >
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif text-white/90 leading-tight mb-4">
-            Vanlentino高定展
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif text-white/90 leading-tight mb-4">
+            卡塔尔Valentino拍摄
           </h1>
           <p className="text-white/60 font-song text-lg md:text-xl max-w-3xl">
             在卡塔尔多哈体验不一样的奢华
@@ -356,6 +356,34 @@ export default function ValentinoProject() {
           onNext={goToNextImage}
         />
       )}
+
+      {/* 固定在左下角的返回按钮 */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+        className="fixed left-6 bottom-6 z-50"
+      >
+        <Link 
+          href="/#brand-projects" 
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-300 group"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-6 w-6 text-white/80 group-hover:text-white transition-colors" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={1.5} 
+              d="M11 17l-5-5m0 0l5-5m-5 5h12" 
+            />
+          </svg>
+        </Link>
+      </motion.div>
     </section>
   )
 } 

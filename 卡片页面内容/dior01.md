@@ -11,4 +11,3 @@ Dior 松花湖 「冰雪之夜」
 
 ![DAF156EA-9E0E-488F-880E-31A2493BC020_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\dior01\DAF156EA-9E0E-488F-880E-31A2493BC020_1_105_c.jpeg)
 
-![E0451AF6-CD53-4B07-B90D-04244F0F1B6C_1_105_c](C:\Users\Administrator\Documents\myworknet\02worknet\public\images\dior01\E0451AF6-CD53-4B07-B90D-04244F0F1B6C_1_105_c.jpeg)
