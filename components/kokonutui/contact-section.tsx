@@ -139,8 +139,8 @@ export default function ContactSection() {
               </div>
               
               {/* 右侧：联系信息 */}
-              <div className="relative bg-white/[0.02] border-l border-white/5">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-white/[0.08] backdrop-blur-md z-0"></div>
+              <div className="relative bg-white/[0.01] border-l border-white/5">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/[0.005] to-white/[0.03] backdrop-blur-md z-0"></div>
                 <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative z-10 h-full">
                   <motion.h3 
                     className="text-2xl font-medium text-white/90 mb-2 hidden md:block"
@@ -169,7 +169,7 @@ export default function ContactSection() {
                     transition={{ duration: 0.5, delay: 0.5 }}
                     viewport={{ once: true }}
                   >
-                    “ 和我聊聊，开启创意视觉新探索。”
+                    " 和我聊聊，开启创意视觉新探索。"
                   </motion.p>
                   
                   {/* 手机版按钮 */}

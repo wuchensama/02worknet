@@ -290,7 +290,7 @@ export default function AboutMe() {
   const cards = [
     {
       title: "合作品牌",
-      description: "曾为多个品牌拍摄国际时装周，为Valentino、Dior、Chanel等多个品牌拍摄VIC活动以及明星现场",
+      description: "曾为多个品牌拍摄国际时装周，为Valentino、Dior、Chanel、CHAUMET等多个品牌拍摄VIC活动以及明星现场",
       gradient: "from-rose-500/[0.15] to-transparent",
       carouselImages: [
         "/images/cardlunbo/77AC7AEA-5FF8-4F53-8536-125CD42CBFC2_1_105_c.jpeg",

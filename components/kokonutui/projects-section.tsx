@@ -23,6 +23,7 @@ type ProjectContent = {
   content: string;
   video?: string;
   secondVideo?: string;
+  thirdVideo?: string;
 };
 
 // 项目卡片组件
@@ -79,6 +80,47 @@ function ProjectCard({
       content: `卡塔尔王妃御用的"华伦天奴"真的让人爱不释手、这次受邀出席多哈的华伦天奴高定展、200多件的高定作品让我目不暇接、这些裙子似乎都会说话、每一件裙子都有一段故事、或浪漫、或唯美、或天马行空、总之充满着无限可能，也让我叹为观止。
 
 Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔国家的"豪横"，只有皇室可用的豪华餐厅举行晚宴、意大利最顶级的接待团队，还有……关于华伦天奴未完待续的故事`
+    },
+    xuzhibin: {
+      images: [
+        "/images/xuzhibin/photo/5F2BF0FF-0112-4748-95E2-C78DE8F35649_1_105_c.jpeg",
+        "/images/xuzhibin/photo/72E25273-ABE0-450E-89A3-D9654749445A_1_105_c.jpeg",
+        "/images/xuzhibin/photo/84FB93B3-88C0-473C-B8FF-BD97C8222174_1_105_c.jpeg",
+        "/images/xuzhibin/photo/330D7515-B9AA-4074-9BFA-9BA52FE5E0FF_1_105_c.jpeg",
+        "/images/xuzhibin/photo/A6B50DD2-64E7-4CBA-BC4B-98420DD45C3F_1_105_c.jpeg",
+        "/images/xuzhibin/photo/C092EE87-C20B-4915-A294-51EFDF7F70F4_1_105_c.jpeg",
+        "/images/xuzhibin/photo/CF386C71-E7EC-41D2-ABD3-9E5D9B08A0A7_1_105_c.jpeg",
+        "/images/xuzhibin/photo/D00BC5E7-262E-441A-AEA7-43643B2A8C14_1_105_c.jpeg",
+        "/images/xuzhibin/photo/D575B092-B5A4-492C-93B9-7CAC4F91FCC1_1_105_c.jpeg"
+      ],
+      content: `大明山滑雪场`
+    },
+    mimimi: {
+      images: [
+        "/images/mimimi/photo/4C6F5D2B-1841-4493-AECF-8A5EF9AEB9A4_1_105_c.jpeg",
+        "/images/mimimi/photo/75BA6F2E-8504-49C3-89D2-13836F0AC08B_1_105_c.jpeg",
+        "/images/mimimi/photo/677F4D15-64F1-476D-93A9-C8FA87CD8231_1_105_c.jpeg",
+        "/images/mimimi/photo/33692D03-A8EF-4A33-BAFB-320D091178F1_1_105_c.jpeg",
+        "/images/mimimi/photo/ABF5F09C-0BD1-4BCC-A4E9-524755D31EAD_1_105_c.jpeg",
+        "/images/mimimi/photo/C12A261C-8071-44B0-9F50-DFF4D4AC269F_1_105_c.jpeg",
+        "/images/mimimi/photo/E8981BFD-8F99-448E-A97D-1C12C529EBA2_1_105_c.jpeg",
+        "/images/mimimi/photo/FFF8F8ED-27FD-43CB-BF4E-D1774ACBEBBA_1_105_c.jpeg"
+      ],
+      video: "/images/mimimi/export_1709354004910.mov",
+      secondVideo: "/images/mimimi/export_1709877138778.mov",
+      content: ` `
+    },
+    lulu: {
+      images: [
+        "/images/lulu/photo/43CC24DC-4AB2-4313-B674-44E108534388_1_105_c.jpeg",
+        "/images/lulu/photo/271882EB-A29F-47FE-B6AF-8945BE8144BF_1_105_c.jpeg",
+        "/images/lulu/photo/BC8ADADA-2A87-446D-8093-E458A397B70A_1_105_c.jpeg",
+        "/images/lulu/photo/1a20a7d2b4984573a0129f1944c65035~tplv-dy-resize-walign-adapt-aq_540_q75.webp"
+      ],
+      video: "/images/lulu/2.mp4",
+      secondVideo: "/images/lulu/3.mp4",
+      thirdVideo: "/images/lulu/1.mp4",
+      content: ` `
     },
     bvlgari: {
       images: [
@@ -159,6 +201,9 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
   // 获取当前项目内容
   const getProjectContent = () => {
     if (title.includes("Valentino")) return projectContent.valentino;
+    if (title.includes("徐志斌")) return projectContent.xuzhibin;
+    if (title.includes("秘秘")) return projectContent.mimimi;
+    if (title.includes("lulu")) return projectContent.lulu;
     if (title.includes("宝格丽")) return projectContent.bvlgari;
     if (title.includes("Roger Vivier")) return projectContent.rv;
     if (title.includes("CHAUMET")) return projectContent.chaumet;
@@ -315,23 +360,126 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
               <div className="relative z-10 p-8">
                 {/* 标题部分 */}
                 <div className="mb-8">
-                  <h2 className="text-3xl md:text-4xl font-serif text-white/90 leading-tight mb-4">
-                    {title}
-                  </h2>
+                  <div className="flex items-center mb-4">
+                    <h2 className="text-3xl md:text-4xl font-serif text-white/90 leading-tight mr-3">
+                      {title}
+                    </h2>
+                    {title.includes("徐志斌") && (
+                      <a 
+                        href="https://v.douyin.com/-uVYA3-GjJQ/" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                      >
+                        主页
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    )}
+                    {title.includes("秘秘") && (
+                      <a 
+                        href="https://v.douyin.com/gYCz1Jlc1eQ/" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                      >
+                        主页
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    )}
+                    {title.includes("lulu") && (
+                      <a 
+                        href="https://www.xiaohongshu.com/user/profile/5cf118f4000000000502723a?xsec_token=YB2TtYKRMD54DwdDdLAH8pV_67Jcyc30vPk00K3vQZLKw=&xsec_source=app_share&xhsshare=CopyLink&appuid=5e200cee00000000010030e6&apptime=1745587217&share_id=2d9dc5b1134346768bf29f633befc3f5" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                      >
+                        主页
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
                   <p className="text-white/60 font-song text-lg">
                     {description}
                   </p>
                 </div>
 
-                {/* 视频部分 */}
-                {currentContent.video && (
+                {/* 顶部图片 - 仅对徐志斌项目显示 */}
+                {title.includes("徐志斌") && (
+                  <div className="mb-8">
+                    <img 
+                      src="/images/xuzhibin/xuzhibin.PNG" 
+                      alt="徐志斌"
+                      className="w-full h-auto rounded-lg shadow-xl"
+                    />
+                  </div>
+                )}
+
+                {/* 顶部图片 - 仅对秘秘项目显示 */}
+                {title.includes("秘秘") && (
+                  <div className="mb-8">
+                    <img 
+                      src="/images/mimimi/mimi.PNG" 
+                      alt="秘秘"
+                      className="w-full h-auto rounded-lg shadow-xl"
+                    />
+                  </div>
+                )}
+
+                {/* 顶部图片 - 仅对lulu项目显示 */}
+                {title.includes("lulu") && (
+                  <div className="mb-8">
+                    <img 
+                      src="/images/lulu/lulu.PNG" 
+                      alt="lulu"
+                      className="w-full h-auto rounded-lg shadow-xl"
+                    />
+                  </div>
+                )}
+
+                {/* 视频部分 - 只对有视频的项目显示 */}
+                {currentContent && currentContent.video && (
                   <div className="mb-8 mx-auto" style={{ maxWidth: "450px" }}>
                     <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
                       <video 
                         src={currentContent.video}
                         poster={currentContent.images[0]}
                         controls
-                        autoPlay
+                        playsInline
+                        loop
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* 第二个视频 */}
+                {currentContent && currentContent.secondVideo && (
+                  <div className="mb-8 mx-auto" style={{ maxWidth: "450px" }}>
+                    <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                      <video 
+                        src={currentContent.secondVideo}
+                        controls
+                        playsInline
+                        loop
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* 第三个视频 - 仅对有第三个视频的项目显示 */}
+                {currentContent && currentContent.thirdVideo && (
+                  <div className="mb-8 mx-auto" style={{ maxWidth: "450px" }}>
+                    <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                      <video 
+                        src={currentContent.thirdVideo}
+                        controls
                         playsInline
                         loop
                         className="w-full h-full object-cover"
@@ -348,21 +496,6 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                     </p>
                   </div>
                 </div>
-
-                {/* 第二个视频 */}
-                {currentContent.secondVideo && (
-                  <div className="mb-8 mx-auto" style={{ maxWidth: "450px" }}>
-                    <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      <video 
-                        src={currentContent.secondVideo}
-                        controls
-                        playsInline
-                        loop
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                )}
 
                 {/* 图片网格 */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -476,22 +609,22 @@ export default function ProjectsSection() {
   // 孵化操盘手项目
   const incubationProjects = [
     {
-      image: "/images/project4.jpg",
-      title: "达人账号孵化",
-      description: "从素人到十万粉，打造独特账号调性与内容策略",
-      tags: ["账号孵化", "内容策略"],
+      image: "/images/xuzhibin/photo/330D7515-B9AA-4074-9BFA-9BA52FE5E0FF_1_105_c.jpeg",
+      title: "徐志斌",
+      description: "合作拍摄剪辑多次万达集团下吃喝玩乐推广内容",
+      tags: ["艺人", "137w粉丝"],
     },
     {
-      image: "/images/project5.jpg",
-      title: "爆款内容创作",
-      description: "单条破百万播放的爆款视频创作与优化方案",
-      tags: ["爆款", "短视频"],
+      image: "/images/mimimi/photo/FFF8F8ED-27FD-43CB-BF4E-D1774ACBEBBA_1_105_c.jpeg",
+      title: "秘秘",
+      description: "",
+      tags: ["颜值主播", "344万粉丝"],
     },
     {
-      image: "/images/project6.jpg",
-      title: "KOL视觉升级",
-      description: "为成熟账号提供视觉升级方案，提升品牌调性",
-      tags: ["KOL", "视觉升级"],
+      image: "/images/lulu/photo/1a20a7d2b4984573a0129f1944c65035~tplv-dy-resize-walign-adapt-aq_540_q75.webp",
+      title: "高定女王lulu",
+      description: "多次拍摄高定fitting和品牌VIC活动",
+      tags: ["时尚KOL", "粉丝21.1万"],
     },
   ];
   
@@ -634,13 +767,13 @@ export default function ProjectsSection() {
         {/* 0-1孵化操盘手部分 */}
         <div className="mb-24">
           <CategoryTitle 
-            title="短视频0-1孵化运营" 
+            title="短视频拍摄运营" 
             colorClass="bg-gradient-to-b from-indigo-400 to-indigo-600" 
           />
           
           <div className="mb-8">
             <p className="text-white/60 max-w-3xl font-song text-sm md:text-base leading-relaxed">
-              从素人到<span className="font-medium text-white/80">十万粉</span>，单账号月均<span className="font-medium text-white/80">GMV60w+</span>，<span className="font-medium text-white/80">30+</span>爆款视频（单条<span className="font-medium text-white/80">100w+</span>播放）。成熟账号粉丝视觉搭建，合作<span className="font-medium text-white/80">徐志斌</span>、<span className="font-medium text-white/80">秘秘</span>、<span className="font-medium text-white/80">lulu</span>、<span className="font-medium text-white/80">米粒mili</span>、<span className="font-medium text-white/80">张林超</span>等账号拍摄（总粉丝量破亿）
+              <span className="font-medium text-white/80">合作过徐志斌</span>、<span className="font-medium text-white/80">秘秘</span>、<span className="font-medium text-white/80">lulu</span>、<span className="font-medium text-white/80">米粒mili</span>、<span className="font-medium text-white/80">张林超</span>等账号拍摄，创作出<span className="font-medium text-white/80">30+</span>百万流量爆款视频。
             </p>
           </div>
           
