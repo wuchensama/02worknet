@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 import localFont from "next/font/local"
+import AboutMe from "@/components/kokonutui/about-me"
 
 // 使用与hero-geometric相同的字体
 const songFont = localFont({
