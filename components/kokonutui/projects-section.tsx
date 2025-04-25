@@ -685,7 +685,7 @@ export default function ProjectsSection() {
   };
 
   return (
-    <section className={`relative min-h-screen w-full flex flex-col py-32 overflow-hidden bg-[#0c0c0c] ${songFont.variable} ${violaFont.variable}`}>
+    <section id="projects" className={`relative min-h-screen w-full flex flex-col py-32 overflow-hidden bg-[#0c0c0c] ${songFont.variable} ${violaFont.variable}`}>
       {/* 删除了暖色调背景渐变部分 */}
       
       <div className="relative z-10 container mx-auto px-4 md:px-6">
@@ -707,10 +707,12 @@ export default function ProjectsSection() {
         
         {/* 品牌视觉翻译官部分 */}
         <div className="mb-24">
-          <CategoryTitle 
-            title="品牌视觉" 
-            colorClass="bg-gradient-to-b from-rose-400 to-rose-600" 
-          />
+          <div data-section-target="creators-title">
+            <CategoryTitle 
+              title="品牌视觉" 
+              colorClass="bg-gradient-to-b from-rose-400 to-rose-600" 
+            />
+          </div>
           
           <div className="mb-8">
             <p className="text-white/60 max-w-3xl font-song text-sm md:text-base leading-relaxed">
@@ -765,11 +767,13 @@ export default function ProjectsSection() {
         </div>
         
         {/* 0-1孵化操盘手部分 */}
-        <div className="mb-24">
-          <CategoryTitle 
-            title="短视频拍摄运营" 
-            colorClass="bg-gradient-to-b from-indigo-400 to-indigo-600" 
-          />
+        <div id="creators" className="mb-24">
+          <div data-section-target="creators-title">
+            <CategoryTitle 
+              title="短视频拍摄运营" 
+              colorClass="bg-gradient-to-b from-indigo-400 to-indigo-600" 
+            />
+          </div>
           
           <div className="mb-8">
             <p className="text-white/60 max-w-3xl font-song text-sm md:text-base leading-relaxed">
@@ -778,7 +782,7 @@ export default function ProjectsSection() {
           </div>
           
           {/* 孵化项目网格 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8" data-section-target="creators-grid">
             {incubationProjects.map((project, index) => (
               <ProjectCard
                 key={index}
@@ -794,11 +798,13 @@ export default function ProjectsSection() {
         </div>
         
         {/* 技术流创作者部分 */}
-        <div className="mb-24">
-          <CategoryTitle 
-            title="短剧 | 微电影拍摄" 
-            colorClass="bg-gradient-to-b from-amber-400 to-amber-600" 
-          />
+        <div id="shorts" className="mb-24">
+          <div data-section-target="shorts-title">
+            <CategoryTitle 
+              title="短剧 | 微电影拍摄" 
+              colorClass="bg-gradient-to-b from-amber-400 to-amber-600" 
+            />
+          </div>
           
           <div className="mb-8">
             <p className="text-white/60 max-w-3xl font-song text-sm md:text-base leading-relaxed">
@@ -807,7 +813,7 @@ export default function ProjectsSection() {
           </div>
           
           {/* 技术项目网格 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8" data-section-target="shorts-grid">
             {filmProjects.slice(0, visibleCardCount).map((project, index) => (
               <ProjectCard
                 key={index}

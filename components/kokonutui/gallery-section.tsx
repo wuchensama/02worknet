@@ -288,7 +288,7 @@ export default function GallerySection() {
   };
   
   return (
-    <section className={`relative w-full py-24 overflow-hidden bg-[#000000] ${songFont.variable} ${violaFont.variable}`}>
+    <section id="gallery" className={`relative w-full py-24 overflow-hidden bg-[#000000] ${songFont.variable} ${violaFont.variable}`}>
       {/* 背景效果 */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#050505] to-[#0a0a0a]" />
       <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.03] mix-blend-overlay" />

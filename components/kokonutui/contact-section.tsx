@@ -64,7 +64,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className={`relative w-full py-32 overflow-hidden bg-[#0a0a0a] ${songFont.variable} ${violaFont.variable}`}>
+    <section id="contact" className={`relative w-full py-32 overflow-hidden bg-[#0a0a0a] ${songFont.variable} ${violaFont.variable}`}>
       {/* 背景效果 */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] to-[#050505]" />
       <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-3 mix-blend-overlay" />

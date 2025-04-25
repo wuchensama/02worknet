@@ -325,8 +325,8 @@ export default function AboutMe() {
   ]
 
   return (
-    <div className={`relative w-full py-20 bg-[#030303] ${songFont.variable}`}>
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.03] via-transparent to-rose-500/[0.03] blur-3xl" />
+    <section id="about" className={`relative min-h-screen w-full flex items-center py-24 overflow-hidden bg-[#030303] ${songFont.variable}`}>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#040404] to-[#0a0a0a]" />
       
       {/* 动态背景元素 */}
       <div className="absolute inset-0 overflow-hidden">
@@ -466,6 +466,6 @@ export default function AboutMe() {
           animation-play-state: paused;
         }
       `}</style>
-    </div>
+    </section>
   )
 } 

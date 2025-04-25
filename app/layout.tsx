@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import Navigation from './navigation'
+import FloatingNav from '../components/FloatingNav'
 
 export const metadata: Metadata = {
   title: '摄影师嘉阳 - 奢华品牌视觉专家',
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body>
         <Navigation />
+        <FloatingNav />
         {children}
       </body>
     </html>
