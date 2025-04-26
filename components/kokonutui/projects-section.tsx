@@ -24,6 +24,8 @@ type ProjectContent = {
   video?: string;
   secondVideo?: string;
   thirdVideo?: string;
+  bilibiliIframes?: { src: string; isVertical: boolean }[];
+  customVideo?: { src: string; isVertical: boolean };
 };
 
 // 项目卡片组件
@@ -93,7 +95,11 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
         "/images/xuzhibin/photo/D00BC5E7-262E-441A-AEA7-43643B2A8C14_1_105_c.jpeg",
         "/images/xuzhibin/photo/D575B092-B5A4-492C-93B9-7CAC4F91FCC1_1_105_c.jpeg"
       ],
-      content: `大明山滑雪场`
+      content: "",
+      customVideo: {
+        src: "http://jeyon.test.upcdn.net/%E3%80%90MV%E3%80%91%E8%90%A7%E5%B1%B1%E6%A2%A6%E5%A8%9C%E6%96%AF%E5%BA%84%E5%9B%AD-%E5%BE%90%E5%BF%97%E6%96%8C-%E9%BB%91%E7%99%BD%E5%89%AA%E8%BE%91.mp4.h265.nbhd",
+        isVertical: false
+      }
     },
     mimimi: {
       images: [
@@ -189,7 +195,7 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
         "/images/dior01/64065867-853A-47BC-BA37-4E73D84F8146_1_105_c.jpeg",
         "/images/dior01/5D6F4F38-F62C-4016-991B-A40D99EE0DEC_1_105_c.jpeg"
       ],
-      video: "/images/dior01/dior.mp4",
+      video: "http://jeyon.test.upcdn.net/Dior%20%E6%9D%BE%E8%8A%B1%E6%B9%96%20%E3%80%8C%E5%86%B0%E9%9B%AA%E4%B9%8B%E5%A4%9C%E3%80%8D%E6%99%9A%E5%AE%B4.mp4.h265.nbhd",
       content: `有幸受邀参加 Dior 松花湖王子酒店晚宴，这份殊荣源于全国消费排行前 25 名的身份。踏入酒店的瞬间，仿佛进入了一个被 Dior 美学浸润的梦幻世界，从大堂到宴会厅，每一处细节都彰显着品牌独有的奢华与格调。
 
 步入晚宴现场，Dior 标志性的元素巧妙地融入每一处布置，经典的黑白色调搭配璀璨的灯光，营造出既高贵又浪漫的氛围。200 多件精心陈列的 Dior 高定服饰静静诉说着品牌百年的匠心传承，每一件都宛如艺术品，精湛的剪裁、华丽的面料、细腻的刺绣，或是诉说着巴黎的浪漫风情，或是展现着先锋的时尚理念，令人目不暇接、叹为观止。
@@ -201,7 +207,7 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
   // 获取当前项目内容
   const getProjectContent = () => {
     if (title.includes("Valentino")) return projectContent.valentino;
-    if (title.includes("徐志斌")) return projectContent.xuzhibin;
+    if (title.includes("徐志滨")) return projectContent.xuzhibin;
     if (title.includes("秘秘")) return projectContent.mimimi;
     if (title.includes("lulu")) return projectContent.lulu;
     if (title.includes("宝格丽")) return projectContent.bvlgari;
@@ -364,7 +370,7 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                     <h2 className="text-3xl md:text-4xl font-serif text-white/90 leading-tight mr-3">
                       {title}
                     </h2>
-                    {title.includes("徐志斌") && (
+                    {title.includes("徐志滨") && (
                       <a 
                         href="https://v.douyin.com/-uVYA3-GjJQ/" 
                         target="_blank" 
@@ -409,12 +415,12 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                   </p>
                 </div>
 
-                {/* 顶部图片 - 仅对徐志斌项目显示 */}
-                {title.includes("徐志斌") && (
+                {/* 顶部图片 - 仅对徐志滨项目显示 */}
+                {title.includes("徐志滨") && (
                   <div className="mb-8">
                     <img 
                       src="/images/xuzhibin/xuzhibin.PNG" 
-                      alt="徐志斌"
+                      alt="徐志滨"
                       className="w-full h-auto rounded-lg shadow-xl"
                     />
                   </div>
@@ -452,6 +458,8 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                         controls
                         playsInline
                         loop
+                        autoPlay
+                        muted={false}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -488,14 +496,44 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                   </div>
                 )}
 
-                {/* 正文内容 */}
-                <div className="mb-8">
-                  <div className="prose prose-lg prose-invert max-w-none">
-                    <p className="text-lg text-white/80 leading-relaxed mb-4 font-song whitespace-pre-line">
-                      {currentContent.content}
-                    </p>
+                {/* 徐志滨卡片：显示自定义视频 */}
+                {title.includes("徐志滨") && currentContent.customVideo && (
+                  <div className="mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div
+                        className="relative"
+                        style={{
+                          aspectRatio: currentContent.customVideo.isVertical ? '9/16' : '16/9',
+                          maxHeight: window.innerWidth < 768 ? '80vh' : 'none'
+                        }}
+                      >
+                        <video
+                          src={currentContent.customVideo.src}
+                          controls
+                          playsInline
+                          className="absolute inset-0 w-full h-full rounded-lg shadow-lg bg-black"
+                          preload="auto"
+                          onLoadedData={e => {
+                            const video = e.currentTarget;
+                            video.currentTime = 0.01;
+                            setTimeout(() => video.pause(), 100);
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* 其他卡片正常显示正文 */}
+                {!title.includes("徐志滨") && (
+                  <div className="mb-8">
+                    <div className="prose prose-lg prose-invert max-w-none">
+                      <p className="text-lg text-white/80 leading-relaxed mb-4 font-song whitespace-pre-line">
+                        {currentContent.content}
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 {/* 图片网格 */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -609,10 +647,52 @@ export default function ProjectsSection() {
   // 孵化操盘手项目
   const incubationProjects = [
     {
+      title: "徐志滨",
+      description: "合作拍摄剪辑多次万达集团旗下吃喝玩乐内容",
       image: "/images/xuzhibin/photo/330D7515-B9AA-4074-9BFA-9BA52FE5E0FF_1_105_c.jpeg",
-      title: "徐志斌",
-      description: "合作拍摄剪辑多次万达集团下吃喝玩乐推广内容",
       tags: ["艺人", "137w粉丝"],
+      expandedContent: (
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <div className="aspect-video">
+              <iframe
+                src="//player.bilibili.com/player.html?isOutside=true&aid=114404339222779&bvid=BV1ptLozsEmG&cid=29626928899&p=1"
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                className="w-full h-full"
+              />
+            </div>
+            <div className="aspect-video">
+              <iframe
+                src="//player.bilibili.com/player.html?isOutside=true&aid=114404355998846&bvid=BV1WxLozdEDU&cid=29626928801&p=1"
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                className="w-full h-full"
+              />
+            </div>
+            <div className="aspect-video">
+              <iframe
+                src="//player.bilibili.com/player.html?isOutside=true&aid=114404355999466&bvid=BV1WxLozdEZB&cid=29626994373&p=1"
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                className="w-full h-full"
+              />
+            </div>
+            <div className="aspect-video">
+              <iframe
+                src="//player.bilibili.com/player.html?isOutside=true&aid=114404356066504&bvid=BV1CxLozdE6R&cid=29626993601&p=1"
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
+      ),
     },
     {
       image: "/images/mimimi/photo/FFF8F8ED-27FD-43CB-BF4E-D1774ACBEBBA_1_105_c.jpeg",
@@ -777,7 +857,7 @@ export default function ProjectsSection() {
           
           <div className="mb-8">
             <p className="text-white/60 max-w-3xl font-song text-sm md:text-base leading-relaxed">
-              <span className="font-medium text-white/80">合作过徐志斌</span>、<span className="font-medium text-white/80">秘秘</span>、<span className="font-medium text-white/80">lulu</span>、<span className="font-medium text-white/80">米粒mili</span>、<span className="font-medium text-white/80">张林超</span>等账号拍摄，创作出<span className="font-medium text-white/80">30+</span>百万流量爆款视频。
+              <span className="font-medium text-white/80">合作过徐志滨</span>、<span className="font-medium text-white/80">秘秘</span>、<span className="font-medium text-white/80">lulu</span>、<span className="font-medium text-white/80">米粒mili</span>、<span className="font-medium text-white/80">张林超</span>等账号拍摄，创作出<span className="font-medium text-white/80">30+</span>百万流量爆款视频。
             </p>
           </div>
           
