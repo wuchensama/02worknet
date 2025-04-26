@@ -4,7 +4,6 @@ import Navigation from './navigation'
 import FloatingNav from '../components/FloatingNav'
 import { Inter } from 'next/font/google'
 import Preloader from '@/components/Preloader'
-import BackgroundMusic from '@/components/BackgroundMusic'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -40,7 +39,6 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className={inter.className}>
         <Preloader />
-        <BackgroundMusic />
         <Navigation />
         <FloatingNav />
         {children}
