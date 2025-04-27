@@ -138,13 +138,13 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
         "/images/baogeli75liuyifei/EB39F360-8044-4477-8B1A-234F9A72F67A_1_105_c.jpeg",
         "/images/baogeli75liuyifei/7B312ACF-9A15-4CDF-9A98-A360FE44E5F4_1_105_c.jpeg",
         "/images/baogeli75liuyifei/B297AD58-530F-4D2D-BF0B-2329752D47B7_1_105_c.jpeg",
-        "/images/baogeli75liuyifei/3F9DBFFE-BFE6-43E1-BB1A-75CB03137CFE_1_105_c.jpeg",
+        "/images/baogeli75liuyifei/3F9DBFFE-BFE6-43E1-BD1A-75CB03137CFE_1_105_c.jpeg",
         "/images/baogeli75liuyifei/5EA52A67-CF76-4E5B-A8FD-2CC887F3AD52.jpeg",
         "/images/baogeli75liuyifei/A870EF54-1F61-4CEF-8717-5731EE176E81_1_105_c.jpeg",
         "/images/baogeli75liuyifei/BB50C670-472C-404B-898C-02BA9F124108_1_105_c.jpeg",
         "/images/baogeli75liuyifei/D27203AE-995D-40E2-8B42-5203654150FB_1_105_c.jpeg"
       ],
-      video: "https://v.qq.com/txp/iframe/player.html?vid=p3088rfmmdn&auto=1&autoplay=true&muted=1&volume=0&playsinline=1&show1080=1&defaultQuality=fhd",
+      video: "/images/baogeli75liuyifei/baogeli01.mp4",
       fallbackVideo: "/images/baogeli75liuyifei/baogeli01.mp4",
       secondVideo: "/images/baogeli75liuyifei/01e41c7009b6520c01037103870f15fd9e_258.mp4",
       content: `踏入BVLGARI 75 周年灵蛇展的现场，仿若进入一个被灵蛇元素编织的奢华梦境。从场馆入口蜿蜒盘旋的灵蛇雕塑，到展厅内陈列的灵蛇主题珠宝，每一处细节都诉说着宝格丽与灵蛇文化跨越时空的不解之缘，彰显着品牌大胆华丽、独具匠心的风格。
@@ -159,8 +159,8 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
       images: [
         "/images/rv zhanglinhe/cb5f0d742d2740db8e72d60e689bace7~tplv-dy-resize-walign-adapt-aq_540_q75.webp",
       ],
-      video: "https://1drv.ms/v/c/63cec2a820ec9bdf/IQRnkj9WVLPASpg_QggMAoQmAZ31jMDRdO3DH4iQTIzndt0",
-      fallbackVideo: "/images/rv zhanglinhe/下载 (1).mp4",
+      video: "/images/rv zhanglinhe/rv.mp4",
+      fallbackVideo: "/images/rv zhanglinhe/rv.mp4",
       content: `从巴黎到上海，变的是地理坐标，不变的是 RogerVivier 对极致美学的追求。每一双鞋履都是艺术品，缀满水钻的方扣闪耀着璀璨光芒，丝缎材质在灯光下流转着迷人色泽。品牌方对细节的把控令人惊叹，从装饰设计到材质选择，无不彰显着百年品牌的深厚底蕴。这场活动不仅是视觉盛宴，更是一场关于优雅与时尚的对话，让到场宾客沉浸在 Roger Vivier 构筑的璀璨梦境中，感受着跨越国界的时尚魅力。
 
 此次活动也迎来了明星嘉宾张凌赫，这已是我与他的第三次相遇。现场环境私密，氛围轻松，大家都自在交谈。每次见他，都能发现新变化，演技愈发精湛，气质也更为沉稳，可他礼貌谦逊的特质从未改变，引得在场众人都对他好感满满。他身着品牌服饰，大方自信，在 Roger Vivier 营造的时尚氛围里，尽显独特魅力，也为这场活动增添了别样光彩。
