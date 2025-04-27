@@ -26,6 +26,7 @@ type ProjectContent = {
   thirdVideo?: string;
   bilibiliIframes?: { src: string; isVertical: boolean }[];
   customVideo?: { src: string; isVertical: boolean };
+  fallbackVideo?: string;
 };
 
 // 项目卡片组件
@@ -49,6 +50,8 @@ function ProjectCard({
   const [isHovered, setIsHovered] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [showProjectModal, setShowProjectModal] = useState(false);
+  const [useFallbackVideo, setUseFallbackVideo] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   
   // 决定是否使用图片而不是背景色
   const useImage = image && !image.includes("project");
@@ -78,7 +81,8 @@ function ProjectCard({
         "/images/kataer01/5A37165B-EA91-42D6-B43A-FB4A5A16B2FB_1_105_c.jpeg",
         "/images/kataer01/7B016585-B05B-4E81-B233-40EA40F13E07_1_105_c.jpeg",
       ],
-      video: "/images/kataer01/valentino.mp4",
+      video: "http://jeyon.test.upcdn.net/%E5%90%8D%E6%B5%81%E4%BC%9A%E9%9B%86%E5%A4%9A%E5%93%88%E5%8D%8E%E4%BC%A6%E5%A4%A9%E5%A5%B4Valentino%E5%85%B8%E8%97%8F%E9%AB%98%E5%AE%9A%E5%B1%95%EF%BC%8C%E4%BD%93%E9%AA%8C%E4%B8%80%E5%9C%BA%E5%A5%A2%E5%8D%8E%E7%9A%84%E8%A7%86%E8%A7%89%E7%9B%9B%E5%AE%B4%20%23%E5%8D%8E%E4%BC%A6%E5%A4%A9%E5%A5%B4%20%23Valentino%20%20%23valentino%E5%8D%8E%E4%BC%A6%E5%A4%A9%E5%A5%B4%20%23%E5%8D%A1%E5%A1%94%E5%B0%94%20%23%E9%AB%98%E7%BA%A7%E6%84%9F%E7%A9%BF%E6%90%AD.mp4",
+      fallbackVideo: "/images/kataer01/valentino.mp4",
       content: `卡塔尔王妃御用的"华伦天奴"真的让人爱不释手、这次受邀出席多哈的华伦天奴高定展、200多件的高定作品让我目不暇接、这些裙子似乎都会说话、每一件裙子都有一段故事、或浪漫、或唯美、或天马行空、总之充满着无限可能，也让我叹为观止。
 
 Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔国家的"豪横"，只有皇室可用的豪华餐厅举行晚宴、意大利最顶级的接待团队，还有……关于华伦天奴未完待续的故事`
@@ -312,12 +316,29 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
             onClick={(e) => e.stopPropagation()}
           >
             <div className="aspect-video w-full rounded-lg overflow-hidden shadow-2xl">
-              <iframe 
-                src={videoSrc}
-                scrolling="no" 
-                frameBorder="0" 
-                allowFullScreen={true}
-                className="w-full h-full"
+              <video 
+                src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
+                poster={currentContent?.images?.[0]}
+                controls
+                playsInline
+                loop
+                autoPlay
+                muted={false}
+                className="w-full h-full object-cover"
+                onError={() => {
+                  if (!useFallbackVideo) {
+                    setUseFallbackVideo(true);
+                  }
+                }}
+                onLoadedData={(e) => {
+                  const video = e.currentTarget;
+                  // 如果3秒后视频仍未播放，切换到备用视频
+                  setTimeout(() => {
+                    if (video.readyState < 3 && !useFallbackVideo) {
+                      setUseFallbackVideo(true);
+                    }
+                  }, 3000);
+                }}
               />
             </div>
           </motion.div>
@@ -449,18 +470,32 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                 )}
 
                 {/* 视频部分 - 只对有视频的项目显示 */}
-                {currentContent && currentContent.video && (
+                {currentContent?.video && (
                   <div className="mb-8 mx-auto" style={{ maxWidth: "450px" }}>
                     <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
                       <video 
-                        src={currentContent.video}
-                        poster={currentContent.images[0]}
+                        src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
+                        poster={currentContent?.images?.[0]}
                         controls
                         playsInline
                         loop
                         autoPlay
                         muted={false}
                         className="w-full h-full object-cover"
+                        onError={() => {
+                          if (!useFallbackVideo) {
+                            setUseFallbackVideo(true);
+                          }
+                        }}
+                        onLoadedData={(e) => {
+                          const video = e.currentTarget;
+                          // 如果3秒后视频仍未播放，切换到备用视频
+                          setTimeout(() => {
+                            if (video.readyState < 3 && !useFallbackVideo) {
+                              setUseFallbackVideo(true);
+                            }
+                          }, 3000);
+                        }}
                       />
                     </div>
                   </div>
