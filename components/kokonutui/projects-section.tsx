@@ -138,13 +138,14 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
         "/images/baogeli75liuyifei/EB39F360-8044-4477-8B1A-234F9A72F67A_1_105_c.jpeg",
         "/images/baogeli75liuyifei/7B312ACF-9A15-4CDF-9A98-A360FE44E5F4_1_105_c.jpeg",
         "/images/baogeli75liuyifei/B297AD58-530F-4D2D-BF0B-2329752D47B7_1_105_c.jpeg",
-        "/images/baogeli75liuyifei/3F9DBFFE-BFE6-43E1-BD1A-75CB03137CFE_1_105_c.jpeg",
+        "/images/baogeli75liuyifei/3F9DBFFE-BFE6-43E1-BB1A-75CB03137CFE_1_105_c.jpeg",
         "/images/baogeli75liuyifei/5EA52A67-CF76-4E5B-A8FD-2CC887F3AD52.jpeg",
         "/images/baogeli75liuyifei/A870EF54-1F61-4CEF-8717-5731EE176E81_1_105_c.jpeg",
         "/images/baogeli75liuyifei/BB50C670-472C-404B-898C-02BA9F124108_1_105_c.jpeg",
         "/images/baogeli75liuyifei/D27203AE-995D-40E2-8B42-5203654150FB_1_105_c.jpeg"
       ],
-      video: "/images/baogeli75liuyifei/baogeli01.mp4",
+      video: "https://v.qq.com/txp/iframe/player.html?vid=p3088rfmmdn&auto=1&autoplay=true&muted=1&volume=0&playsinline=1&show1080=1&defaultQuality=fhd",
+      fallbackVideo: "/images/baogeli75liuyifei/baogeli01.mp4",
       secondVideo: "/images/baogeli75liuyifei/01e41c7009b6520c01037103870f15fd9e_258.mp4",
       content: `踏入BVLGARI 75 周年灵蛇展的现场，仿若进入一个被灵蛇元素编织的奢华梦境。从场馆入口蜿蜒盘旋的灵蛇雕塑，到展厅内陈列的灵蛇主题珠宝，每一处细节都诉说着宝格丽与灵蛇文化跨越时空的不解之缘，彰显着品牌大胆华丽、独具匠心的风格。
 
@@ -473,7 +474,31 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                 {currentContent?.video && (
                   <div className="mb-8 mx-auto" style={{ maxWidth: "450px" }}>
                     <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      {title.includes("Roger Vivier") ? (
+                      {title.includes("宝格丽") ? (
+                        <iframe
+                          src={currentContent.video}
+                          width="100%"
+                          height="100%"
+                          frameBorder="0"
+                          scrolling="no"
+                          allowFullScreen
+                          className="w-full h-full object-cover"
+                          onError={() => {
+                            if (!useFallbackVideo) {
+                              setUseFallbackVideo(true);
+                            }
+                          }}
+                          onLoad={(e) => {
+                            const iframe = e.currentTarget;
+                            // 如果3秒后视频仍未加载，切换到备用视频
+                            setTimeout(() => {
+                              if (iframe.contentDocument?.readyState !== 'complete' && !useFallbackVideo) {
+                                setUseFallbackVideo(true);
+                              }
+                            }, 3000);
+                          }}
+                        />
+                      ) : title.includes("Roger Vivier") ? (
                         <iframe
                           src={currentContent.video}
                           width="100%"
