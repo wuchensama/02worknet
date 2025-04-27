@@ -10,11 +10,15 @@ import { useState } from "react"
 const songFont = localFont({
   src: "../../public/fonts/xinyijixiangsong.ttf",
   variable: "--font-song",
+  display: "swap",
+  preload: true,
 })
 
 const violaFont = localFont({
   src: "../../public/fonts/Violableness.ttf",
   variable: "--font-viola",
+  display: "swap",
+  preload: true,
 })
 
 // 定义项目内容类型
@@ -39,7 +43,8 @@ function ProjectCard({
   tags,
   delay,
   hasVideo,
-  videoSrc
+  videoSrc,
+  index = 0 // 添加 index 参数
 }: {
   image: string
   title: string
@@ -48,6 +53,7 @@ function ProjectCard({
   delay: number
   hasVideo?: boolean
   videoSrc?: string
+  index?: number
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -245,16 +251,22 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
       className="group relative cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      style={{ willChange: 'transform, opacity' }}
     >
-        <a href="#" className="block" onClick={handleCardClick}>
+      <a href="#" className="block" onClick={handleCardClick}>
         <div className="overflow-hidden rounded-lg">
           <div className="relative aspect-[3/4] w-full">
-            {/* 图片或占位背景 */}
+            {/* 优化图片加载 */}
             {useImage ? (
-              <img 
+              <Image 
                 src={image} 
                 alt={title}
-                  className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+                width={800}
+                height={600}
+                quality={75}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+                priority={index < 3} // 前3张图片预加载
               />
             ) : (
               <div className={cn(
@@ -305,233 +317,180 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
       </a>
     </motion.div>
 
-      {/* 视频播放弹窗 */}
-      {showVideo && videoSrc && (
+    {/* 优化视频加载 */}
+    {showVideo && videoSrc && (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+        onClick={() => setShowVideo(false)}
+      >
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-          onClick={() => setShowVideo(false)}
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ 
+            duration: 0.3, 
+            ease: [0.19, 1.0, 0.22, 1.0],
+            opacity: { duration: 0.2 }
+          }}
+          className="relative w-full max-w-4xl"
+          onClick={(e) => e.stopPropagation()}
         >
-          <motion.div 
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ 
-              duration: 0.3, 
-              ease: [0.19, 1.0, 0.22, 1.0],
-              opacity: { duration: 0.2 }
-            }}
-            className="relative w-full max-w-4xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="aspect-video w-full rounded-lg overflow-hidden shadow-2xl">
-              <video 
-                src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
-                poster={currentContent?.images?.[0]}
-                controls
-                playsInline
-                loop
-                autoPlay
-                muted={false}
-                className="w-full h-full object-cover"
-                onError={() => {
-                  if (!useFallbackVideo) {
+          <div className="aspect-video w-full rounded-lg overflow-hidden shadow-2xl">
+            <video 
+              src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
+              poster={currentContent?.images?.[0]}
+              controls
+              playsInline
+              loop
+              preload="none"
+              className="w-full h-full object-cover"
+              onError={() => {
+                if (!useFallbackVideo) {
+                  setUseFallbackVideo(true);
+                }
+              }}
+              onLoadedData={(e) => {
+                const video = e.currentTarget;
+                setTimeout(() => {
+                  if (video.readyState < 3 && !useFallbackVideo) {
                     setUseFallbackVideo(true);
                   }
-                }}
-                onLoadedData={(e) => {
-                  const video = e.currentTarget;
-                  // 如果3秒后视频仍未播放，切换到备用视频
-                  setTimeout(() => {
-                    if (video.readyState < 3 && !useFallbackVideo) {
-                      setUseFallbackVideo(true);
-                    }
-                  }, 3000);
-                }}
-              />
-            </div>
-          </motion.div>
+                }, 3000);
+              }}
+            />
+          </div>
         </motion.div>
-      )}
+      </motion.div>
+    )}
 
-      {/* 项目弹窗 */}
-      {showProjectModal && currentContent && (
+    {/* 项目弹窗 */}
+    {showProjectModal && currentContent && (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
+        className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto"
+        onClick={() => setShowProjectModal(false)}
+      >
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto"
-          onClick={() => setShowProjectModal(false)}
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ 
+            duration: 0.3, 
+            ease: [0.19, 1.0, 0.22, 1.0],
+            opacity: { duration: 0.2 }
+          }}
+          className="relative w-full max-w-6xl bg-[#0a0a0a] rounded-2xl shadow-2xl overflow-hidden my-8"
+          onClick={(e) => e.stopPropagation()}
         >
-          <motion.div 
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ 
-              duration: 0.3, 
-              ease: [0.19, 1.0, 0.22, 1.0],
-              opacity: { duration: 0.2 }
-            }}
-            className="relative w-full max-w-6xl bg-[#0a0a0a] rounded-2xl shadow-2xl overflow-hidden my-8"
-            onClick={(e) => e.stopPropagation()}
+          {/* 关闭按钮 */}
+          <button 
+            className="absolute top-4 right-4 z-50 text-white/80 hover:text-white bg-black/40 hover:bg-black/60 p-2 rounded-full transition-colors"
+            onClick={() => setShowProjectModal(false)}
           >
-            {/* 关闭按钮 */}
-            <button 
-              className="absolute top-4 right-4 z-50 text-white/80 hover:text-white bg-black/40 hover:bg-black/60 p-2 rounded-full transition-colors"
-              onClick={() => setShowProjectModal(false)}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
 
-            <div className="relative">
-              {/* 背景效果 */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-[30%] right-0 w-[90%] h-[90%] rounded-full bg-gradient-to-br from-rose-500/20 via-amber-600/10 to-transparent blur-[120px] opacity-60" />
-                <div className="absolute -bottom-[30%] left-0 w-[70%] h-[70%] rounded-full bg-gradient-to-tr from-rose-700/10 via-amber-500/5 to-transparent blur-[100px] opacity-40" />
-                <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.03] mix-blend-overlay" />
+          <div className="relative">
+            {/* 背景效果 */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute -top-[30%] right-0 w-[90%] h-[90%] rounded-full bg-gradient-to-br from-rose-500/20 via-amber-600/10 to-transparent blur-[120px] opacity-60" />
+              <div className="absolute -bottom-[30%] left-0 w-[70%] h-[70%] rounded-full bg-gradient-to-tr from-rose-700/10 via-amber-500/5 to-transparent blur-[100px] opacity-40" />
+              <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.03] mix-blend-overlay" />
+            </div>
+
+            <div className="relative z-10 p-8">
+              {/* 标题部分 */}
+              <div className="mb-8">
+                <div className="flex items-center mb-4">
+                  <h2 className="text-3xl md:text-4xl font-serif text-white/90 leading-tight mr-3">
+                    {title}
+                  </h2>
+                  {title.includes("徐志滨") && (
+                    <a 
+                      href="https://v.douyin.com/-uVYA3-GjJQ/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      主页
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                  {title.includes("秘秘") && (
+                    <a 
+                      href="https://v.douyin.com/gYCz1Jlc1eQ/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      主页
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                  {title.includes("lulu") && (
+                    <a 
+                      href="https://www.xiaohongshu.com/user/profile/5cf118f4000000000502723a?xsec_token=YB2TtYKRMD54DwdDdLAH8pV_67Jcyc30vPk00K3vQZLKw=&xsec_source=app_share&xhsshare=CopyLink&appuid=5e200cee00000000010030e6&apptime=1745587217&share_id=2d9dc5b1134346768bf29f633befc3f5" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      主页
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                  {title.includes("张林超") && (
+                    <a 
+                      href="https://m.weibo.cn/u/1726349245?luicode=10000011&lfid=100808d47cd0bc7b09b466b657e3141ef9603e" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      主页
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+                <p className="text-white/60 font-song text-lg">
+                  {description}
+                </p>
               </div>
 
-              <div className="relative z-10 p-8">
-                {/* 标题部分 */}
-                <div className="mb-8">
-                  <div className="flex items-center mb-4">
-                    <h2 className="text-3xl md:text-4xl font-serif text-white/90 leading-tight mr-3">
-                      {title}
-                    </h2>
-                    {title.includes("徐志滨") && (
-                      <a 
-                        href="https://v.douyin.com/-uVYA3-GjJQ/" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-                      >
-                        主页
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </a>
-                    )}
-                    {title.includes("秘秘") && (
-                      <a 
-                        href="https://v.douyin.com/gYCz1Jlc1eQ/" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-                      >
-                        主页
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </a>
-                    )}
-                    {title.includes("lulu") && (
-                      <a 
-                        href="https://www.xiaohongshu.com/user/profile/5cf118f4000000000502723a?xsec_token=YB2TtYKRMD54DwdDdLAH8pV_67Jcyc30vPk00K3vQZLKw=&xsec_source=app_share&xhsshare=CopyLink&appuid=5e200cee00000000010030e6&apptime=1745587217&share_id=2d9dc5b1134346768bf29f633befc3f5" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-                      >
-                        主页
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </a>
-                    )}
-                    {title.includes("张林超") && (
-                      <a 
-                        href="https://m.weibo.cn/u/1726349245?luicode=10000011&lfid=100808d47cd0bc7b09b466b657e3141ef9603e" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="inline-flex items-center px-3 py-1 text-sm text-white/70 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
-                      >
-                        主页
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                      </a>
-                    )}
-                  </div>
-                  <p className="text-white/60 font-song text-lg">
-                    {description}
-                  </p>
-                </div>
 
 
 
 
 
-
-                {/* 视频部分 - 只对有视频的项目显示 */}
-                {currentContent?.video && (
-                  <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
-                    <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      {title.includes("张林超") ? (
-                        <div className="relative" style={{ aspectRatio: '16/9' }}>
-                          <video 
-                            src={currentContent.video}
-                            controls
-                            playsInline
-                            loop
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : title.includes("宝格丽") ? (
-                        <div className="relative" style={{ aspectRatio: '9/16', maxWidth: '450px', margin: '0 auto' }}>
-                          <video 
-                            src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
-                            poster={currentContent?.images?.[0]}
-                            controls
-                            playsInline
-                            loop
-                            autoPlay
-                            muted={false}
-                            className="w-full h-full object-cover"
-                            onError={() => {
-                              if (!useFallbackVideo) {
-                                setUseFallbackVideo(true);
-                              }
-                            }}
-                            onLoadedData={(e) => {
-                              const video = e.currentTarget;
-                              setTimeout(() => {
-                                if (video.readyState < 3 && !useFallbackVideo) {
-                                  setUseFallbackVideo(true);
-                                }
-                              }, 3000);
-                            }}
-                          />
-                        </div>
-                      ) : title.includes("Roger Vivier") ? (
-                        <div className="relative" style={{ aspectRatio: '9/16', maxWidth: '450px', margin: '0 auto' }}>
-                          <video 
-                            src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
-                            poster={currentContent?.images?.[0]}
-                            controls
-                            playsInline
-                            loop
-                            autoPlay
-                            muted={false}
-                            className="w-full h-full object-cover"
-                            onError={() => {
-                              if (!useFallbackVideo) {
-                                setUseFallbackVideo(true);
-                              }
-                            }}
-                            onLoadedData={(e) => {
-                              const video = e.currentTarget;
-                              setTimeout(() => {
-                                if (video.readyState < 3 && !useFallbackVideo) {
-                                  setUseFallbackVideo(true);
-                                }
-                              }, 3000);
-                            }}
-                          />
-                        </div>
-                      ) : (
+              {/* 视频部分 - 只对有视频的项目显示 */}
+              {currentContent?.video && (
+                <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
+                  <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                    {title.includes("张林超") ? (
+                      <div className="relative" style={{ aspectRatio: '16/9' }}>
+                        <video 
+                          src={currentContent.video}
+                          controls
+                          playsInline
+                          loop
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : title.includes("宝格丽") ? (
+                      <div className="relative" style={{ aspectRatio: '9/16', maxWidth: '450px', margin: '0 auto' }}>
                         <video 
                           src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
                           poster={currentContent?.images?.[0]}
@@ -555,26 +514,68 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                             }, 3000);
                           }}
                         />
-                      )}
-                    </div>
+                      </div>
+                    ) : title.includes("Roger Vivier") ? (
+                      <div className="relative" style={{ aspectRatio: '9/16', maxWidth: '450px', margin: '0 auto' }}>
+                        <video 
+                          src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
+                          poster={currentContent?.images?.[0]}
+                          controls
+                          playsInline
+                          loop
+                          autoPlay
+                          muted={false}
+                          className="w-full h-full object-cover"
+                          onError={() => {
+                            if (!useFallbackVideo) {
+                              setUseFallbackVideo(true);
+                            }
+                          }}
+                          onLoadedData={(e) => {
+                            const video = e.currentTarget;
+                            setTimeout(() => {
+                              if (video.readyState < 3 && !useFallbackVideo) {
+                                setUseFallbackVideo(true);
+                              }
+                            }, 3000);
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <video 
+                        src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
+                        poster={currentContent?.images?.[0]}
+                        controls
+                        playsInline
+                        loop
+                        autoPlay
+                        muted={false}
+                        className="w-full h-full object-cover"
+                        onError={() => {
+                          if (!useFallbackVideo) {
+                            setUseFallbackVideo(true);
+                          }
+                        }}
+                        onLoadedData={(e) => {
+                          const video = e.currentTarget;
+                          setTimeout(() => {
+                            if (video.readyState < 3 && !useFallbackVideo) {
+                              setUseFallbackVideo(true);
+                            }
+                          }, 3000);
+                        }}
+                      />
+                    )}
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* 第二个视频 */}
-                {currentContent && currentContent.secondVideo && (
-                  <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
-                    <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      {title.includes("张林超") ? (
-                        <div className="relative" style={{ aspectRatio: '16/9' }}>
-                          <video 
-                            src={currentContent.secondVideo}
-                            controls
-                            playsInline
-                            loop
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
+              {/* 第二个视频 */}
+              {currentContent && currentContent.secondVideo && (
+                <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
+                  <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                    {title.includes("张林超") ? (
+                      <div className="relative" style={{ aspectRatio: '16/9' }}>
                         <video 
                           src={currentContent.secondVideo}
                           controls
@@ -582,26 +583,26 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                           loop
                           className="w-full h-full object-cover"
                         />
-                      )}
-                    </div>
+                      </div>
+                    ) : (
+                      <video 
+                        src={currentContent.secondVideo}
+                        controls
+                        playsInline
+                        loop
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* 第三个视频 - 仅对有第三个视频的项目显示 */}
-                {currentContent && currentContent.thirdVideo && (
-                  <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
-                    <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      {title.includes("张林超") ? (
-                        <div className="relative" style={{ aspectRatio: '16/9' }}>
-                          <video 
-                            src={currentContent.thirdVideo}
-                            controls
-                            playsInline
-                            loop
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
+              {/* 第三个视频 - 仅对有第三个视频的项目显示 */}
+              {currentContent && currentContent.thirdVideo && (
+                <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
+                  <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                    {title.includes("张林超") ? (
+                      <div className="relative" style={{ aspectRatio: '16/9' }}>
                         <video 
                           src={currentContent.thirdVideo}
                           controls
@@ -609,26 +610,26 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                           loop
                           className="w-full h-full object-cover"
                         />
-                      )}
-                    </div>
+                      </div>
+                    ) : (
+                      <video 
+                        src={currentContent.thirdVideo}
+                        controls
+                        playsInline
+                        loop
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* 第四个视频 - 仅对有第四个视频的项目显示 */}
-                {currentContent && currentContent.fourthVideo && (
-                  <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
-                    <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      {title.includes("张林超") ? (
-                        <div className="relative" style={{ aspectRatio: '16/9' }}>
-                          <video 
-                            src={currentContent.fourthVideo}
-                            controls
-                            playsInline
-                            loop
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
+              {/* 第四个视频 - 仅对有第四个视频的项目显示 */}
+              {currentContent && currentContent.fourthVideo && (
+                <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
+                  <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                    {title.includes("张林超") ? (
+                      <div className="relative" style={{ aspectRatio: '16/9' }}>
                         <video 
                           src={currentContent.fourthVideo}
                           controls
@@ -636,26 +637,26 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                           loop
                           className="w-full h-full object-cover"
                         />
-                      )}
-                    </div>
+                      </div>
+                    ) : (
+                      <video 
+                        src={currentContent.fourthVideo}
+                        controls
+                        playsInline
+                        loop
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* 第五个视频 - 仅对有第五个视频的项目显示 */}
-                {currentContent && currentContent.fifthVideo && (
-                  <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
-                    <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      {title.includes("张林超") ? (
-                        <div className="relative" style={{ aspectRatio: '16/9' }}>
-                          <video 
-                            src={currentContent.fifthVideo}
-                            controls
-                            playsInline
-                            loop
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
+              {/* 第五个视频 - 仅对有第五个视频的项目显示 */}
+              {currentContent && currentContent.fifthVideo && (
+                <div className="mb-4 mx-auto" style={{ maxWidth: "800px" }}>
+                  <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                    {title.includes("张林超") ? (
+                      <div className="relative" style={{ aspectRatio: '16/9' }}>
                         <video 
                           src={currentContent.fifthVideo}
                           controls
@@ -663,26 +664,26 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                           loop
                           className="w-full h-full object-cover"
                         />
-                      )}
-                    </div>
+                      </div>
+                    ) : (
+                      <video 
+                        src={currentContent.fifthVideo}
+                        controls
+                        playsInline
+                        loop
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* 第六个视频 - 仅对有第六个视频的项目显示 */}
-                {currentContent && currentContent.sixthVideo && (
-                  <div className="mb-4 mx-auto" style={{ maxWidth: "450px" }}>
-                    <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      {title.includes("张林超") ? (
-                        <div className="relative" style={{ aspectRatio: '9/16' }}>
-                          <video 
-                            src={currentContent.sixthVideo}
-                            controls
-                            playsInline
-                            loop
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
+              {/* 第六个视频 - 仅对有第六个视频的项目显示 */}
+              {currentContent && currentContent.sixthVideo && (
+                <div className="mb-4 mx-auto" style={{ maxWidth: "450px" }}>
+                  <div className="relative w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
+                    {title.includes("张林超") ? (
+                      <div className="relative" style={{ aspectRatio: '9/16' }}>
                         <video 
                           src={currentContent.sixthVideo}
                           controls
@@ -690,90 +691,99 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                           loop
                           className="w-full h-full object-cover"
                         />
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* 徐志滨卡片：显示自定义视频 */}
-                {title.includes("徐志滨") && currentContent.customVideo && (
-                  <div className="mb-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div
-                        className="relative"
-                        style={{
-                          aspectRatio: currentContent.customVideo.isVertical ? '9/16' : '16/9',
-                          maxHeight: window.innerWidth < 768 ? '80vh' : 'none'
-                        }}
-                      >
-                        <video
-                          src={currentContent.customVideo.src}
-                          controls
-                          playsInline
-                          className="absolute inset-0 w-full h-full rounded-lg shadow-lg bg-black"
-                          preload="auto"
-                          onLoadedData={e => {
-                            const video = e.currentTarget;
-                            video.currentTime = 0.01;
-                            setTimeout(() => video.pause(), 100);
-                          }}
-                        />
                       </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* 其他卡片正常显示正文 */}
-                {!title.includes("徐志滨") && (
-                  <div className="mb-8">
-                    <div className="prose prose-lg prose-invert max-w-none">
-                      <p className="text-lg text-white/80 leading-relaxed mb-4 font-song whitespace-pre-line">
-                        {currentContent.content}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* 图片网格 */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {currentContent.images.map((src, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.1 * index }}
-                      className="overflow-hidden rounded-lg cursor-pointer"
-                    >
-                      <img 
-                        src={src} 
-                        alt={`${title}图片 ${index + 1}`}
-                        className="w-full h-auto object-cover transition-transform duration-300 hover:scale-105"
+                    ) : (
+                      <video 
+                        src={currentContent.sixthVideo}
+                        controls
+                        playsInline
+                        loop
+                        className="w-full h-full object-cover"
                       />
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* 返回按钮 */}
-                <div className="mt-8 flex justify-between items-center pt-6 border-t border-white/10">
-                  <button 
-                    onClick={() => setShowProjectModal(false)}
-                    className="flex items-center text-white/60 hover:text-white transition-colors group"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-                    </svg>
-                    <span>返回</span>
-                  </button>
-                  
-                  <div className="text-white/40 text-sm">
-                    © {new Date().getFullYear()} 摄影师嘉阳
+                    )}
                   </div>
+                </div>
+              )}
+
+              {/* 徐志滨卡片：显示自定义视频 */}
+              {title.includes("徐志滨") && currentContent.customVideo && (
+                <div className="mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div
+                      className="relative"
+                      style={{
+                        aspectRatio: currentContent.customVideo.isVertical ? '9/16' : '16/9',
+                        maxHeight: window.innerWidth < 768 ? '80vh' : 'none'
+                      }}
+                    >
+                      <video
+                        src={currentContent.customVideo.src}
+                        controls
+                        playsInline
+                        className="absolute inset-0 w-full h-full rounded-lg shadow-lg bg-black"
+                        preload="auto"
+                        onLoadedData={e => {
+                          const video = e.currentTarget;
+                          video.currentTime = 0.01;
+                          setTimeout(() => video.pause(), 100);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 其他卡片正常显示正文 */}
+              {!title.includes("徐志滨") && (
+                <div className="mb-8">
+                  <div className="prose prose-lg prose-invert max-w-none">
+                    <p className="text-lg text-white/80 leading-relaxed mb-4 font-song whitespace-pre-line">
+                      {currentContent.content}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* 图片网格 */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {currentContent.images.map((src, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 * index }}
+                    className="overflow-hidden rounded-lg cursor-pointer"
+                  >
+                    <img 
+                      src={src} 
+                      alt={`${title}图片 ${index + 1}`}
+                      className="w-full h-auto object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* 返回按钮 */}
+              <div className="mt-8 flex justify-between items-center pt-6 border-t border-white/10">
+                <button 
+                  onClick={() => setShowProjectModal(false)}
+                  className="flex items-center text-white/60 hover:text-white transition-colors group"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                  </svg>
+                  <span>返回</span>
+                </button>
+                
+                <div className="text-white/40 text-sm">
+                  © {new Date().getFullYear()} 摄影师嘉阳
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
-      )}
+      </motion.div>
+    )}
     </>
   )
 }
@@ -1013,6 +1023,7 @@ export default function ProjectsSection() {
             {brandProjects.slice(0, visibleCardCount).map((project, index) => (
               <ProjectCard
                 key={index}
+                index={index}
                 image={project.image}
                 title={project.title}
                 description={project.description}
@@ -1074,6 +1085,7 @@ export default function ProjectsSection() {
             {incubationProjects.slice(0, visibleCardCount).map((project, index) => (
               <ProjectCard
                 key={index}
+                index={index}
                 image={project.image}
                 title={project.title}
                 description={project.description}
@@ -1135,6 +1147,7 @@ export default function ProjectsSection() {
             {filmProjects.slice(0, isFilmExpanded ? filmProjects.length : 3).map((project, index) => (
               <ProjectCard
                 key={index}
+                index={index}
                 image={project.image}
                 title={project.title}
                 description={project.description}
