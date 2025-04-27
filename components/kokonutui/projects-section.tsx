@@ -158,8 +158,8 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
       images: [
         "/images/rv zhanglinhe/cb5f0d742d2740db8e72d60e689bace7~tplv-dy-resize-walign-adapt-aq_540_q75.webp",
       ],
-      video: "/images/rv zhanglinhe/下载 (1).mp4",
-      secondVideo: "/images/rv zhanglinhe/shipin.mp4",
+      video: "https://1drv.ms/v/c/63cec2a820ec9bdf/IQRnkj9WVLPASpg_QggMAoQmAZ31jMDRdO3DH4iQTIzndt0",
+      fallbackVideo: "/images/rv zhanglinhe/下载 (1).mp4",
       content: `从巴黎到上海，变的是地理坐标，不变的是 RogerVivier 对极致美学的追求。每一双鞋履都是艺术品，缀满水钻的方扣闪耀着璀璨光芒，丝缎材质在灯光下流转着迷人色泽。品牌方对细节的把控令人惊叹，从装饰设计到材质选择，无不彰显着百年品牌的深厚底蕴。这场活动不仅是视觉盛宴，更是一场关于优雅与时尚的对话，让到场宾客沉浸在 Roger Vivier 构筑的璀璨梦境中，感受着跨越国界的时尚魅力。
 
 此次活动也迎来了明星嘉宾张凌赫，这已是我与他的第三次相遇。现场环境私密，氛围轻松，大家都自在交谈。每次见他，都能发现新变化，演技愈发精湛，气质也更为沉稳，可他礼貌谦逊的特质从未改变，引得在场众人都对他好感满满。他身着品牌服饰，大方自信，在 Roger Vivier 营造的时尚氛围里，尽显独特魅力，也为这场活动增添了别样光彩。
@@ -473,30 +473,56 @@ Vanlentino品牌方的安排除了细致周到外，还有就是专属卡塔尔�
                 {currentContent?.video && (
                   <div className="mb-8 mx-auto" style={{ maxWidth: "450px" }}>
                     <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black/30 shadow-xl">
-                      <video 
-                        src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
-                        poster={currentContent?.images?.[0]}
-                        controls
-                        playsInline
-                        loop
-                        autoPlay
-                        muted={false}
-                        className="w-full h-full object-cover"
-                        onError={() => {
-                          if (!useFallbackVideo) {
-                            setUseFallbackVideo(true);
-                          }
-                        }}
-                        onLoadedData={(e) => {
-                          const video = e.currentTarget;
-                          // 如果3秒后视频仍未播放，切换到备用视频
-                          setTimeout(() => {
-                            if (video.readyState < 3 && !useFallbackVideo) {
+                      {title.includes("Roger Vivier") ? (
+                        <iframe
+                          src={currentContent.video}
+                          width="100%"
+                          height="100%"
+                          frameBorder="0"
+                          scrolling="no"
+                          allowFullScreen
+                          className="w-full h-full object-cover"
+                          onError={() => {
+                            if (!useFallbackVideo) {
                               setUseFallbackVideo(true);
                             }
-                          }, 3000);
-                        }}
-                      />
+                          }}
+                          onLoad={(e) => {
+                            const iframe = e.currentTarget;
+                            // 如果3秒后视频仍未加载，切换到备用视频
+                            setTimeout(() => {
+                              if (iframe.contentDocument?.readyState !== 'complete' && !useFallbackVideo) {
+                                setUseFallbackVideo(true);
+                              }
+                            }, 3000);
+                          }}
+                        />
+                      ) : (
+                        <video 
+                          src={useFallbackVideo ? currentContent?.fallbackVideo! : currentContent?.video!}
+                          poster={currentContent?.images?.[0]}
+                          controls
+                          playsInline
+                          loop
+                          autoPlay
+                          muted={false}
+                          className="w-full h-full object-cover"
+                          onError={() => {
+                            if (!useFallbackVideo) {
+                              setUseFallbackVideo(true);
+                            }
+                          }}
+                          onLoadedData={(e) => {
+                            const video = e.currentTarget;
+                            // 如果3秒后视频仍未播放，切换到备用视频
+                            setTimeout(() => {
+                              if (video.readyState < 3 && !useFallbackVideo) {
+                                setUseFallbackVideo(true);
+                              }
+                            }, 3000);
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                 )}
